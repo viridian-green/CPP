@@ -8,15 +8,9 @@ class Contact
     std::string FirstName;
     std::string LastName;
     std::string NickName;
-    int PhoneNumber;
+    std::string PhoneNumber;
     std::string DarkestSecret;
     Contact( void );  // Constructor
     ~Contact( void );
 };
-
-
-
-
-
-
 #endif

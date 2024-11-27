@@ -6,8 +6,8 @@
 class Phonebook
 {
 	public: // Public access specifier
+    Contact Con[8];
     Phonebook( void );  // Constructor
-    Contact Contacts[8];
     ~Phonebook( void );
 };
 
