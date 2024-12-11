@@ -23,7 +23,7 @@ void InputIndex(Phonebook& pb)
 	while (true)
 	{
 	int contact_index;
-	cout << "Please enter a contact index between 0 and 8.\n";
+	cout << "Please enter an index to view contact info.\n";
 	cin >> contact_index;
 	if (contact_index > 8)
 	{
@@ -48,21 +48,6 @@ void getInput(std::string &field, const std::string &prompt) {
 	else
 		break;
 	}
-
-}
-
-void InputNewContact(Contact& contact)
-{
-	Contact newContact;
-
-	std::string FirstName, LastName, NickName, PhoneNumber, DarkestSecret;
-
-	std::cin.ignore();
-	getInput(FirstName, "Enter your first name: ");
-	getInput(LastName, "Enter your last name: ");
-	getInput(NickName, "Enter your nickname: ");
-	getInput(PhoneNumber, "Enter your phone number: ");
-	getInput(PhoneNumber, "Enter your darkest secret: ");
 }
 
 void format(string& str)
@@ -73,21 +58,33 @@ void format(string& str)
     cout << setw(10) << right << str << "|";
 }
 
- void Display(std::vector<Contact>& contacts)
+ void Display(Phonebook& pb)
     {
-        std::cout << "     index" << "|" << "first name" << "|" << " last name" << "|" << "  nickname";
-        for (size_t i = 0; i < contacts.size(); ++i)
+        std::cout << "     Index" << "|" << "First Name" << "|" << " Last Name" << "|" << "  Nickname" << "\n";
+        for (int i = 0; i < pb.num; ++i)
         {
-        cout << setw(10) << right << i << "|";
-        //format(contacts[i].FirstName);
+        cout << "\n" << setw(10) << right << i << "|";
+        format(pb.Con[i].FirstName);
+		format(pb.Con[i].LastName);
+		format(pb.Con[i].NickName);
         }
+		cout << "\n";
     }
+
+void InputNewContact(Contact& Con)
+{
+	std::cin.ignore();
+	getInput(Con.FirstName, "Enter your first name: ");
+	getInput(Con.LastName, "Enter your last name: ");
+	getInput(Con.NickName, "Enter your nickname: ");
+	getInput(Con.PhoneNumber, "Enter your phone number: ");
+	getInput(Con.PhoneNumber, "Enter your darkest secret: ");
+}
 
 int main()
 {
 	Phonebook pb;
 	std::string first_prompt;
-	std::map<std::string, int> myMap;
 	pb.num = 0;
 
 	while (1)
