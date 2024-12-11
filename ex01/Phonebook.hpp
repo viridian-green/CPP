@@ -17,6 +17,7 @@ class Phonebook
 	public: // Public access specifier
     Contact Con[8];
     int num;
+    int MAX_CONTACT;
 
     Phonebook( void );  // Constructor
     ~Phonebook( void );

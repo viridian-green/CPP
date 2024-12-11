@@ -49,7 +49,7 @@ void getInput(std::string &field, const std::string &prompt) {
 	{
 	std::cout << prompt;
 	std::getline(std::cin, field);
-	if (field.empty() || field.find(' ') != std::string::npos)
+	if (field.empty())
 		cout << "Error, you may not leave an field empty.\n";
 	else
 		break;
@@ -85,7 +85,7 @@ void InputNewContact(Contact& Con)
 	getInput(Con.LastName, "Enter your last name: ");
 	getInput(Con.NickName, "Enter your nickname: ");
 	getInput(Con.PhoneNumber, "Enter your phone number: ");
-	getInput(Con.PhoneNumber, "Enter your darkest secret: ");
+	getInput(Con.DarkestSecret, "Enter your darkest secret: ");
 }
 
 int main()
@@ -93,15 +93,21 @@ int main()
 	Phonebook pb;
 	std::string first_prompt;
 	pb.num = 0;
+	int MAX_CONTACT = 8;
 
 	while (1)
 	{
-	cout << "Please enter one of the three following commands: add, search or exit.\n";
+	cout << "Enter one of the three commands: add, search or exit.\n";
 	cin >> first_prompt;
 	if (first_prompt == "add")
 	{
-		InputNewContact(pb.Con[pb.num]);
-		pb.num++;
+		if (pb.num < MAX_CONTACT)
+		{
+			InputNewContact(pb.Con[pb.num]);
+			pb.num++;
+		}
+		else
+			InputNewContact(pb.Con[7]);
 	}
 	else if (first_prompt == "search")
 	{
@@ -109,6 +115,6 @@ int main()
 		InputIndex(pb);
 	}
 	else if (first_prompt == "exit")
-        exit(0);
+		exit(0);
 	}
 }
