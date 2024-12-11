@@ -13,26 +13,32 @@ Contact::~Contact( void )
 	return;
 };
 
-void DisplayContact(Contact& contact)
+void DisplayContact(Contact& Con)
 {
-	 cout << "Please enter a contact index between 0 and 8.\n";
+	cout << "First name :" << Con.FirstName << "\n";
+	cout << "Last name :" << Con.LastName << "\n";
+	cout << "Nickname :" << Con.NickName << "\n";
+	cout << "Phone number :" << Con.PhoneNumber << "\n";
+	cout << "Darkest secret :" << Con.DarkestSecret << "\n";
+	cout << "\n";
 }
 
 void InputIndex(Phonebook& pb)
 {
-	while (true)
-	{
-	int contact_index;
 	cout << "Please enter an index to view contact info.\n";
-	cin >> contact_index;
-	if (contact_index > 8)
+	while (1)
 	{
-		cout << "Error. ";
+	int index;
+	cin >> index;
+	cout << "\n";
+	if (index > 8 || index > pb.num - 1)
+	{
+		cout << "Error. Please enter a valid index: ";
 		continue;
 	}
 	else
 	{
-		DisplayContact(pb.Con[contact_index]);
+		DisplayContact(pb.Con[index]);
 		break;
 	}
 	}
@@ -61,6 +67,7 @@ void format(string& str)
  void Display(Phonebook& pb)
     {
         std::cout << "     Index" << "|" << "First Name" << "|" << " Last Name" << "|" << "  Nickname" << "\n";
+		int début = 1;
         for (int i = 0; i < pb.num; ++i)
         {
         cout << "\n" << setw(10) << right << i << "|";
