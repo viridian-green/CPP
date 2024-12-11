@@ -1,8 +1,3 @@
-#include <iostream>
-#include <cstring>
-#include <string>
-#include <cctype>
-#include <map>
 #include "Phonebook.hpp"
 #include "Contact.hpp"
 
@@ -18,7 +13,12 @@ Contact::~Contact( void )
 	return;
 };
 
-void DisplayContacts()
+void DisplayContact(Contact& contact)
+{
+	 cout << "Please enter a contact index between 0 and 8.\n";
+}
+
+void InputIndex(Phonebook& pb)
 {
 	while (true)
 	{
@@ -32,7 +32,7 @@ void DisplayContacts()
 	}
 	else
 	{
-		cout << "hey.\n";
+		DisplayContact(pb.Con[contact_index]);
 		break;
 	}
 	}
@@ -51,7 +51,7 @@ void getInput(std::string &field, const std::string &prompt) {
 
 }
 
-void InputInfo(Contact& contact)
+void InputNewContact(Contact& contact)
 {
 	Contact newContact;
 
@@ -65,6 +65,13 @@ void InputInfo(Contact& contact)
 	getInput(PhoneNumber, "Enter your darkest secret: ");
 }
 
+void format(string& str)
+{
+	int i = 0;
+	if (str.length() >= 10)
+        str = str.substr(0, 9) + ".";
+    cout << setw(10) << right << str << "|";
+}
 
 int main()
 {
@@ -72,16 +79,20 @@ int main()
 	std::string first_prompt;
 	Contact instance1;
 	std::map<std::string, int> myMap;
+	pb.num = 0;
 
 	while (1)
 	{
 	cout << "Please enter one of the three following commands: add, search or exit.\n";
 	cin >> first_prompt;
 	if (first_prompt == "add")
-		InputInfo(pb.Con[0]);
+	{
+		InputNewContact(pb.Con[pb.num]);
+		pb.num++;
+	}
 	else if (first_prompt == "search")
 	{
-		DisplayContacts();
+		InputIndex(pb);
 	}
 	else if (first_prompt == "exit")
         exit(0);

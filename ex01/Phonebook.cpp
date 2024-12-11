@@ -12,10 +12,3 @@ Phonebook::~Phonebook( void )
 {
 	return;
 };
-
-/*
-int main()
-{
-	Phonebook instance_1;
-}
-*/
