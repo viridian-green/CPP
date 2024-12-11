@@ -73,11 +73,20 @@ void format(string& str)
     cout << setw(10) << right << str << "|";
 }
 
+ void Display(std::vector<Contact>& contacts)
+    {
+        std::cout << "     index" << "|" << "first name" << "|" << " last name" << "|" << "  nickname";
+        for (size_t i = 0; i < contacts.size(); ++i)
+        {
+        cout << setw(10) << right << i << "|";
+        //format(contacts[i].FirstName);
+        }
+    }
+
 int main()
 {
 	Phonebook pb;
 	std::string first_prompt;
-	Contact instance1;
 	std::map<std::string, int> myMap;
 	pb.num = 0;
 
@@ -92,6 +101,7 @@ int main()
 	}
 	else if (first_prompt == "search")
 	{
+		Display(pb);
 		InputIndex(pb);
 	}
 	else if (first_prompt == "exit")
