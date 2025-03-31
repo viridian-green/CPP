@@ -1,8 +1,6 @@
 #include "Phonebook.hpp"
 #include "Contact.hpp"
 
-using namespace std;
-
 Contact::Contact( void )
 {
 	return;
@@ -15,32 +13,35 @@ Contact::~Contact( void )
 
 void DisplayContact(Contact& Con)
 {
-	cout << "First name :" << Con.FirstName << "\n";
-	cout << "Last name :" << Con.LastName << "\n";
-	cout << "Nickname :" << Con.NickName << "\n";
-	cout << "Phone number :" << Con.PhoneNumber << "\n";
-	cout << "Darkest secret :" << Con.DarkestSecret << "\n";
-	cout << "\n";
+	std::cout << "First name :" << Con.FirstName << "\n";
+	std::cout << "Last name :" << Con.LastName << "\n";
+	std::cout << "Nickname :" << Con.NickName << "\n";
+	std::cout << "Phone number :" << Con.PhoneNumber << "\n";
+	std::cout << "Darkest secret :" << Con.DarkestSecret << "\n";
+	std::cout << "\n";
 }
 
 void InputIndex(Phonebook& pb)
 {
-	cout << "Please enter an index to view contact info.\n";
+	std::cout << "Please enter an index to view contact info.\n";
+	std::string input;
 	while (1)
 	{
+
+	std::cin >> input;
+	std::cout << "\n";
+	if (input == "exit")
+		break;
 	int index;
-	cin >> index;
-	cout << "\n";
+	index = atoi(input.c_str());
 	if (index > 8 || index > pb.num - 1)
 	{
-		cout << "Error. Please enter a valid index: ";
+		std::cout << "Error. Please enter a valid index visible in table.\n";
+		std::cout << "If table is empty please exit and add a contact: ";
 		continue;
 	}
-	else
-	{
-		DisplayContact(pb.Con[index]);
-		break;
-	}
+	DisplayContact(pb.Con[index]);
+	break;
 	}
 }
 
@@ -50,32 +51,35 @@ void getInput(std::string &field, const std::string &prompt) {
 	std::cout << prompt;
 	std::getline(std::cin, field);
 	if (field.empty())
-		cout << "Error, you may not leave an field empty.\n";
+	std::cout << "Error, you may not leave an field empty.\n";
 	else
 		break;
 	}
 }
 
-void format(string& str)
+void format(std::string& str)
 {
 	int i = 0;
 	if (str.length() >= 10)
         str = str.substr(0, 9) + ".";
-    cout << setw(10) << right << str << "|";
+	std::cout << std::setw(10) << std::right << str << "|";
 }
 
  void Display(Phonebook& pb)
     {
-        std::cout << "     Index" << "|" << "First Name" << "|" << " Last Name" << "|" << "  Nickname" << "\n";
-		int début = 1;
+        std::cout << std::setw(10) << "Index" << "|";
+		std::cout << std::setw(10) << "Firstname" << "|";
+		std::cout << std::setw(10) << "Lastname" << "|";
+		std::cout << std::setw(10) << "Nickname" << std::endl;
+		int start = 1;
         for (int i = 0; i < pb.num; ++i)
         {
-        cout << "\n" << setw(10) << right << i << "|";
+		std::cout << "\n" << std::setw(10) << std::right << i << "|";
         format(pb.Con[i].FirstName);
 		format(pb.Con[i].LastName);
 		format(pb.Con[i].NickName);
         }
-		cout << "\n";
+		std::cout << "\n";
     }
 
 void InputNewContact(Contact& Con)
@@ -97,8 +101,8 @@ int main()
 
 	while (1)
 	{
-	cout << "Enter one of the three commands: add, search or exit.\n";
-	cin >> first_prompt;
+	std::cout << "Enter one of the three commands: add, search or exit.\n";
+	std::cin >> first_prompt;
 	if (first_prompt == "add")
 	{
 		if (pb.num < MAX_CONTACT)

@@ -14,11 +14,12 @@
 
 class Phonebook
 {
-	public: // Public access specifier
+private:
     Contact Con[8];
     int num;
     int MAX_CONTACT;
 
+public: // Public access specifier
     Phonebook( void );  // Constructor
     ~Phonebook( void );
 };
