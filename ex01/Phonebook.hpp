@@ -10,23 +10,28 @@
 #include <iomanip>
 #include <map>
 #include "Phonebook.hpp"
-#include "Contact.hpp"
+
+class Contact;
 
 class Phonebook
 {
 private:
-    Contact Con[8];
+	static const int MAX_CONTACTS = 8;
+    Contact Con[MAX_CONTACTS];
     int num;
-    int MAX_CONTACT;
+
 
 public: // Public access specifier
-    Phonebook( void );  // Constructor
-    ~Phonebook( void );
+    Phonebook();  // Constructor
+    ~Phonebook();
+
+
+	   // Getters
+	   Contact& getContact(int index);
+	   int getMaxContact() const;
+	   int getNum() const;
+	 // Setter for num
+	 void incrementNum();
+
 };
-
-
-
-
-
-
 #endif
