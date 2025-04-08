@@ -7,7 +7,7 @@ OBJ = $(SRC:%.cpp=%.o)
 
 RM = rm -f
 
-NAME = brainz
+NAME = refs
 
 all : $(NAME)
 
