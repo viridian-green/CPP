@@ -2,7 +2,7 @@ CC = c++
 
 FLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC = Zombie.cpp main.cpp zombieHorde.cpp
+SRC = main.cpp
 OBJ = $(SRC:%.cpp=%.o)
 
 RM = rm -f
