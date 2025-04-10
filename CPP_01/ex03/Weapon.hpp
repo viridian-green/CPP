@@ -6,7 +6,7 @@
 /*   By: ademarti <ademarti@student.42berlin.de     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 13:33:56 by ademarti          #+#    #+#             */
-/*   Updated: 2025/04/08 15:12:52 by ademarti         ###   ########.fr       */
+/*   Updated: 2025/04/10 11:18:12 by ademarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,9 @@ class Weapon
 	std::string type;
 
 	public:
-	const std::string getType();
-	const std::string setType(std::string newVal);
+	Weapon(std::string type);
+	std::string getType();
+	void setType(const std::string &newVal);
 };
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: ademarti <ademarti@student.42berlin.de     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:59:08 by ademarti          #+#    #+#             */
-/*   Updated: 2025/04/08 15:34:28 by ademarti         ###   ########.fr       */
+/*   Updated: 2025/04/10 12:10:59 by ademarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,12 @@
 class HumanB
 {
 	private:
-	Weapon weapon;
+	Weapon *weapon;
 	std::string name;
 
 	public:
-	std::string getName();
+	HumanB(std::string name);
+	void setWeapon(Weapon &type);
 	void attack();
 };
 
