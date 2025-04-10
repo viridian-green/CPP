@@ -1,7 +1,7 @@
 #include "HumanB.hpp"
 
 HumanB::HumanB(std::string name)
-: name(name)
+: name(name), weapon(0)
 {
 };
 
