@@ -25,8 +25,7 @@ int main(int ac, char **av)
 		return(std::cout << "Error. Please input the file name, a first string "
 				  << "and a second string in the following order!\n", 1);
 	}
-	std::fstream file;
-    file.open(av[1], std::ios::in);
+	std::fstream file(av[1], std::ios::in);
 	if (!file.is_open())
 		return(std::cout << "Error opening file." << std::endl, 1);
 	else
