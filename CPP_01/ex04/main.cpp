@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <string.h>
 
 std::string replaceline(std::string line, std::string s1, std::string s2)
 {
@@ -26,6 +27,8 @@ int main(int ac, char **av)
 				  << "and a second string in the following order!\n", 1);
 	}
 	std::fstream file(av[1], std::ios::in);
+	if (strlen(av[2]) == 0)
+		return(std::cout << "Error. Please do not enter an empty string." << std::endl, 1);
 	if (!file.is_open())
 		return(std::cout << "Error opening file." << std::endl, 1);
 	else
