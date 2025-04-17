@@ -6,7 +6,7 @@
 /*   By: ademarti <ademarti@student.42berlin.de     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/04/08 14:59:08 by ademarti          #+#    #+#             */
-/*   Updated: 2025/04/10 14:47:16 by ademarti         ###   ########.fr       */
+/*   Updated: 2025/04/17 15:08:21 by ademarti         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,7 @@ class HumanB
 
 	public:
 	HumanB(std::string name);
+	~HumanB();
 	void setWeapon(Weapon &type);
 	void attack();
 };

@@ -1,5 +1,12 @@
 #include "Zombie.hpp"
 
+Zombie::Zombie(){};
+
+Zombie::Zombie(const std::string &inputname)
+{
+	this->name = inputname;
+};
+
 Zombie::~Zombie()
 {
 	std::cout << this->name << " is destroyed" << std::endl;

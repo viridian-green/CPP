@@ -7,7 +7,8 @@ The second one is using heap --> slower
 int main()
 {
 	int N = 5;
-	Zombie *horde = zombieHorde(5, "Gabrielle");
+	Zombie z("z");
+	Zombie *horde = z.zombieHorde(5, "Gabrielle");
 	for (int i = 0; i < N; i++)
 	{
 		horde[i].announce();

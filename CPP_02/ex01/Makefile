@@ -2,17 +2,17 @@ CC = c++
 
 FLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC = Zombie.cpp main.cpp newZombie.cpp randomChump.cpp
-
+SRC = fixedPointNumber.cpp main.cpp
 OBJ = $(SRC:%.cpp=%.o)
 
 RM = rm -f
 
-NAME = brainz
+NAME = files
 
 all : $(NAME)
 
 $(NAME) : $(OBJ)
+
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ)
 
 clean :

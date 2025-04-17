@@ -6,8 +6,9 @@ The second one is using heap --> slower
 */
 int main()
 {
-	Zombie *z1 = newZombie("BrainEater");
-	randomChump("LegEater");
-
-	delete z1;
+	Zombie manager("manager");
+	Zombie *bobTheZombie = manager.newZombie("Biba");
+	bobTheZombie->announce();
+	manager.randomChump("RandomChamp");
+	delete(bobTheZombie);
 }
