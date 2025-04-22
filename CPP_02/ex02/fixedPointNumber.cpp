@@ -84,7 +84,7 @@ bool Fixed::operator>=(const Fixed &other) const
 }
 
 bool Fixed::operator==(const Fixed &other) const
-{ 
+{
     return this->getRawBits() == other.getRawBits();
 }
 
@@ -93,24 +93,24 @@ bool Fixed::operator!=(const Fixed &other) const
     return this->getRawBits() != other.getRawBits();
 }
 
-bool Fixed::operator+(const Fixed &other) const
+Fixed Fixed::operator+(const Fixed &other) const
 {
-    return this->getRawBits() + other.getRawBits();
+    return this->toFloat() + other.toFloat();
 }
 
-bool Fixed::operator-(const Fixed &other) const
+Fixed Fixed::operator-(const Fixed &other) const
 {
-    return this->getRawBits() - other.getRawBits();
+    return this->toFloat() - other.toFloat();
 }
 
-bool Fixed::operator*(const Fixed &other) const
+Fixed Fixed::operator*(const Fixed &other) const
 {
-    return this->getRawBits() * other.getRawBits();
+    return this->toFloat() * other.toFloat();
 }
 
-bool Fixed::operator/(const Fixed &other) const
+Fixed Fixed::operator/(const Fixed &other) const
 {
-    return this->getRawBits() / other.getRawBits();
+    return this->toFloat() / other.toFloat();
 }
 
 //Prefix increment operator
@@ -118,30 +118,30 @@ Fixed &Fixed::operator++()
 {
     this->setRawBits(this->getRawBits() + 1);
 	return *this;
-} 
+}
 
 //The dummy int is not used in the function
-//but its presence is required by cpp to distinguish 
-//between the prefix and postfix operator 
+//but its presence is required by cpp to distinguish
+//between the prefix and postfix operator
 Fixed Fixed::operator++(int)
 {
     Fixed temp = *this;
 	this->setRawBits(this->getRawBits() + 1);
 	return temp;
-} 
+}
 
 Fixed &Fixed::operator--()
 {
     this->setRawBits(this->getRawBits() - 1);
 	return *this;
-} 
+}
 
 Fixed Fixed::operator--(int)
 {
     Fixed temp = *this;
 	this->setRawBits(this->getRawBits() - 1);
 	return temp;
-} 
+}
 
 Fixed &Fixed::min(Fixed &fpn1, Fixed &fpn2)
 {
