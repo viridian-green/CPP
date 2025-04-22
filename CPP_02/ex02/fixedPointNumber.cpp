@@ -93,6 +93,7 @@ bool Fixed::operator!=(const Fixed &other) const
     return this->getRawBits() != other.getRawBits();
 }
 
+//Here we use toFloat() because we want to return a Fpn not an int
 Fixed Fixed::operator+(const Fixed &other) const
 {
     return this->toFloat() + other.toFloat();
