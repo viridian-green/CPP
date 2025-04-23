@@ -2,13 +2,13 @@ CC = c++
 
 FLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC = ClapTrap.hpp
+SRC = ClapTrap.cpp main.cpp
 
 OBJ = $(SRC:%.cpp=%.o)
 
 RM = rm -f
 
-NAME = claptrap
+NAME = ClapTrap
 
 all : $(NAME)
 
