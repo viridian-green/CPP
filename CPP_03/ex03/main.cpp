@@ -2,7 +2,6 @@
 
 int main()
 {
-	DiamondTrap Adele("Adele");
 	std::cout << "\n";
 	// Dede.attack("Ines");
 	// Dede.attack("Ines");
