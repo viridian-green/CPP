@@ -1,5 +1,6 @@
 #include "ScavTrap.hpp"
 
+
 //When you call a constructor the compiler
 //sets up the memory allocation for the object
 ScavTrap::ScavTrap(const std::string name) : ClapTrap(name)
@@ -14,7 +15,6 @@ ScavTrap::ScavTrap(const std::string name) : ClapTrap(name)
 ScavTrap::ScavTrap(const ScavTrap &other) : ClapTrap(other)
 {
 	this->name = other.name;
-	this->_type = other._type;
 	this->HitPoints = other.HitPoints;
 	this->EnergyPoints = other.EnergyPoints;
 	this->AttackDamage = other.AttackDamage;
@@ -25,7 +25,6 @@ ScavTrap& ScavTrap::operator=(const ScavTrap& other)
 	if (this != &other)
 	{
 		this->name = other.name;
-		this->_type = other._type;
 		this->HitPoints = other.HitPoints;
 		this->EnergyPoints = other.EnergyPoints;
 		this->AttackDamage = other.AttackDamage;
