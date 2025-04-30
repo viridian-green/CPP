@@ -7,11 +7,10 @@
 
 
 //DiamondTrap is responsible for constructing the ClapTrap constructorr
-DiamondTrap::DiamondTrap(const std::string name) : ClapTrap(name + "_clap_name"), ScavTrap(name), FragTrap(name)
+DiamondTrap::DiamondTrap(const std::string name) : ClapTrap(name + "_clap_name"), ScavTrap(name), FragTrap(name), name(name)
 {
-    std::cout << "Default DiamondTrap constructor is called";
-	this->name = name;
-	this->_type = _type;
+    std::cout << "DiamondTrap " << this->name << " default constructor is called" << std::endl;
+    this->_type = _type;
     this->HitPoints = FragTrap::HITPOINTS;
     this->EnergyPoints = ScavTrap::ENERGYPOINTS;
     this->AttackDamage = FragTrap::ATTACKDAMAGE;
@@ -41,10 +40,26 @@ DiamondTrap DiamondTrap::operator=(const DiamondTrap &other)
 
 DiamondTrap::~DiamondTrap()
 {
-	std::cout << "Default DiamondTrap destructor is called";
+	std::cout << "DiamondTrap default destructor is called" << std::endl;
 }
+
+void DiamondTrap::attack(const std::string& target)
+{
+	if (this->EnergyPoints <= 0)
+		std::cout << "DiamondTrap " << this->name << " has no energy left to attack!" << std::endl;
+	else if (this->HitPoints <= 0)
+		std::cout<< "DiamondTrap " << this->name << " has too few hit points to attack!" << std::endl;
+	else
+	{
+	std::cout << "DiamondTrap " << this->name << " attacks " << target
+				  << ", causing " << this->AttackDamage << " points of damage!" << std::endl;
+	this->EnergyPoints--;
+	}
+}
+
 
 void DiamondTrap::whoAmI()
 {
-
+    std::cout << "My DiamondTrap name is " << this->name << std::endl;
+    std::cout << "My ClapTrap name is " << ClapTrap::name << std::endl;
 }

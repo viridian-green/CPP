@@ -12,6 +12,7 @@ ClapTrap::ClapTrap(const std::string name)
 
 ClapTrap::ClapTrap(const ClapTrap &other) :
 name(other.name),
+_type(other._type),
 HitPoints(other.HitPoints),
 EnergyPoints(other.EnergyPoints),
 AttackDamage(other.AttackDamage){}
@@ -21,6 +22,7 @@ ClapTrap& ClapTrap::operator=(ClapTrap const &other)
 	if (this != &other)
 	{
 		this->name = other.name;
+		this->_type = other._type;
 		this->HitPoints = other.HitPoints;
 		this->EnergyPoints = other.EnergyPoints;
 		this->AttackDamage = other.AttackDamage;
@@ -35,7 +37,7 @@ ClapTrap::~ClapTrap()
 
 void ClapTrap::attack(const std::string& target)
 {
-	std::cout << HitPoints << std::endl;
+
 	if (this->EnergyPoints <= 0)
 		std::cout << _type << " " << this->name << " has no energy left to attack!" << std::endl;
 	else if (this->HitPoints <= 0)
