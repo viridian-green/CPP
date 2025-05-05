@@ -2,7 +2,7 @@ CC = c++
 
 FLAGS = -Wall -Wextra -Werror -std=c++98 -Wshadow -Wno-shadow
 
-SRC = Animal.cpp Dog.cpp Cat.cpp main.cpp
+SRC = Animal.cpp Dog.cpp Cat.cpp main.cpp WrongAnimal.cpp WrongCat.cpp
 
 OBJ = $(SRC:%.cpp=%.o)
 

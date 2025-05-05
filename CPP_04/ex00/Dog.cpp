@@ -28,5 +28,5 @@ void Dog::makeSound() const
 
 Dog::~Dog()
 {
-    std::cout << "Dog constructor!" << std::endl;
+    std::cout << "Dog destructor!" << std::endl;
 }
