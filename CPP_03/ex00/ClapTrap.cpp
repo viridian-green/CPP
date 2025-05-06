@@ -4,7 +4,7 @@ ClapTrap::ClapTrap(const std::string name)
   : name(name)
   , HitPoints(10)
   , EnergyPoints(10)
-  , AttackDamage(10)
+  , AttackDamage(0)
 {
     std::cout << "ClapTrap “" << name << "” constructor is called\n";
 }
@@ -54,7 +54,7 @@ void ClapTrap::takeDamage(unsigned int amount)
 	std::cout << "Claptrap " << this->name << " takes damage and loses " << amount << " hit points" << std::endl;
 	if (amount > this->HitPoints)
 		std::cout << this->name << " has no more hit points." << " game over" << std::endl;
-	this->HitPoints =- amount;
+	this->HitPoints = HitPoints - amount;
 }
 
 void ClapTrap::beRepaired(unsigned int amount)
@@ -63,7 +63,7 @@ void ClapTrap::beRepaired(unsigned int amount)
 		std::cout << "ClapTrap " << this->name << " is repaired and regains " << amount << " hit point" << std::endl;
 	else
 		std::cout << "ClapTrap " << this->name << " is repaired and regains " << amount << " hit points" << std::endl;
-	this->HitPoints =+ amount;
+	this->HitPoints = HitPoints + amount;
 	this->EnergyPoints--;
 }
 

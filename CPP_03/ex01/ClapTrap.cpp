@@ -5,7 +5,7 @@ ClapTrap::ClapTrap(const std::string name)
   ,_type("ClapTrap")
   , HitPoints(10)
   , EnergyPoints(10)
-  , AttackDamage(10)
+  , AttackDamage(0)
 {
     std::cout << "ClapTrap “" << name << "” constructor is called\n";
 }
