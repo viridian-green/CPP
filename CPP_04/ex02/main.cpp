@@ -14,11 +14,11 @@
 int main()
 {
 	//I cannot instatiate an Animal project anymore
-	//AAnimal A;  
+	//AAnimal test;  
 	const AAnimal* j = new Dog();
 	const AAnimal* i = new Cat();
-	std::cout << j->getType() << " " << std::endl;
-	std::cout << i->getType() << " " << std::endl;
+	std::cout << j->getType() << " is my type, says j" << std::endl;
+	std::cout << i->getType() << " is my type, says i" << std::endl;
 	i->makeSound();
 	j->makeSound();	
 

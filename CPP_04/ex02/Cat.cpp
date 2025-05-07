@@ -1,14 +1,14 @@
 #include "Cat.hpp"
 
 
-Cat::Cat() : type("Cat"), brain(new Brain())
+Cat::Cat() : AAnimal(), type("Cat"), brain(new Brain())
 {
     std::cout << "Cat construct!" << std::endl;
 }
 
 Cat::Cat(const Cat &other)
 {
-    delete brain;
+    this->type = other.type;
     brain = new Brain(*other.brain);
 }
 
@@ -16,6 +16,7 @@ Cat& Cat::operator=(const Cat &other)
 {
     if (this != &other)
     {
+        this->type = other.type;
         delete brain;
         brain = new Brain(*other.brain);
     }
@@ -25,6 +26,11 @@ Cat& Cat::operator=(const Cat &other)
 void Cat::makeSound() const
 {
     std::cout << "Meooooooow" << std::endl;
+}
+
+std::string Cat::getType() const
+{
+    return type;
 }
 
 Cat::~Cat()

@@ -1,6 +1,6 @@
 #include "Dog.hpp"
 
-Dog::Dog() : type("Dog"), brain(new Brain())
+Dog::Dog() : AAnimal(), type("Dog"), brain(new Brain())
 {
     std::cout << "Dog constructor!" << std::endl;
 }
@@ -8,7 +8,7 @@ Dog::Dog() : type("Dog"), brain(new Brain())
 
 Dog::Dog(const Dog &other)
 {
-    delete brain;
+    this->type = other.type;
     brain = new Brain(*other.brain);
 }
 
@@ -16,6 +16,7 @@ Dog& Dog::operator=(const Dog &other)
 {
     if (this != &other)
     {
+        this->type = other.type;
 		delete brain;
         brain = new Brain(*other.brain);
 
@@ -27,6 +28,11 @@ Dog& Dog::operator=(const Dog &other)
 void Dog::makeSound() const
 {
     std::cout << "Woof Woof" << std::endl;
+}
+
+std::string Dog::getType() const
+{
+    return type;
 }
 
 Dog::~Dog()

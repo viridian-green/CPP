@@ -1,7 +1,6 @@
 #include "Cat.hpp"
 
-
-Cat::Cat() : type("Cat")
+Cat::Cat() : Animal(), type("Cat")
 {
     std::cout << "Cat construct!" << std::endl;
 }
@@ -19,6 +18,12 @@ Cat& Cat::operator=(const Cat &other)
     }
     return (*this);
 }
+
+std::string Cat::getType() const
+{
+    return type;
+}
+
 
 void Cat::makeSound() const
 {
