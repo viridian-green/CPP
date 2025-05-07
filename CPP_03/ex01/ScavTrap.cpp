@@ -33,6 +33,20 @@ ScavTrap& ScavTrap::operator=(const ScavTrap& other)
 	return (*this);
 }
 
+void ScavTrap::attack(const std::string& target)
+{
+	if (this->EnergyPoints <= 0)
+		std::cout << "ScavTrap " << this->name << " has no energy left to attack!" << std::endl;
+	else if (this->HitPoints <= 0)
+		std::cout<< "ScavTrap " << this->name << " has too few hit points to attack!" << std::endl;
+	else
+	{
+	std::cout << "ScavTrap " << this->name << " attacks " << target
+				  << ", causing " << this->AttackDamage << " points of damage!" << std::endl;
+	this->EnergyPoints--;
+	}
+}
+
 ScavTrap::~ScavTrap()
 {
 	std::cout << "ScavTrap default destructor is called" << std::endl;

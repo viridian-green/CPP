@@ -8,7 +8,7 @@ int main()
 	Adele.attack("Ines");
 	Adele.takeDamage(3);
 	Adele.attack("Ines");
-	Adele.takeDamage(10);
+	Adele.takeDamage(7);
 	Adele.attack("Ines");
 	Adele.beRepaired(1);
 	Adele.attack("Ines");
