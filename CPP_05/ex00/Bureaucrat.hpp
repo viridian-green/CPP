@@ -16,8 +16,9 @@ class Bureaucrat
 	Bureaucrat& operator=(const Bureaucrat &other);
 	std::string getName();
 	int getGrade();
-	int incrementGrade();
-	int decrementGrade();
+	void incrementGrade();
+	void decrementGrade();
+	std::ostream& operator<<(std::ostream& os, const Bureaucrat &b);
 	~Bureaucrat();
 
 	//These exception classes inherit from the standard c++ exception class

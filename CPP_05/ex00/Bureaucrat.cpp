@@ -38,7 +38,7 @@ int Bureaucrat::getGrade()
 	return grade;
 }
 
-int Bureaucrat::incrementGrade()
+void Bureaucrat::incrementGrade()
 {
 	try
 	{
@@ -50,24 +50,23 @@ int Bureaucrat::incrementGrade()
 	{
 		std::cerr << "Exception: " << e.what() << std::endl;
 	}
-	return this->grade;
 }
 
-// int Bureaucrat::decrementGrade()
-// {
-// 	try
-// 	{
-// 	if (grade == 150)
-// 	{
-// 		throw "Error. Incrementing grade will make it our of range";
-// 	}
-// 	grade++;
-// 	}
-// 	catch (std::exception & e)
-// 	{
-
-// 	}
-// }
+void Bureaucrat::decrementGrade()
+{
+	try
+	{
+	if (grade == 150)
+	{
+		throw GradeTooHighException();
+	}
+	this->grade++;
+	}
+	catch (std::exception & e)
+	{
+		std::cerr << "Exception :" << e.what() << std::endl;
+	}
+}
 
 Bureaucrat::~Bureaucrat()
 {}
