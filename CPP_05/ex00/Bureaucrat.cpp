@@ -29,11 +29,11 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat &other)
 	return (*this);
 }
 
-std::string Bureaucrat::getName(std::string name)
+std::string Bureaucrat::getName()
 {
 	return name;
 }
-int Bureaucrat::getGrade(int grade)
+int Bureaucrat::getGrade()
 {
 	return grade;
 }
@@ -43,13 +43,14 @@ int Bureaucrat::incrementGrade()
 	try
 	{
 	if (grade == 1)
-		throw "Error. Incrementing grade will make it out of range";
-	grade--;
+		throw GradeTooHighException();
+	this->grade--;
 	}
 	catch (std::exception & e)
 	{
-		std::cerr << "Error. Incrementing grade will make it our of range";
+		std::cerr << "Exception: " << e.what() << std::endl;
 	}
+	return this->grade;
 }
 
 // int Bureaucrat::decrementGrade()
