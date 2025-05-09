@@ -14,12 +14,11 @@ class Bureaucrat
 	Bureaucrat(std::string name, int grade);
 	Bureaucrat(const Bureaucrat &other);
 	Bureaucrat& operator=(const Bureaucrat &other);
-	std::string getName();
-	int getGrade();
+	std::string getName() const ;
+	int getGrade() const;
 	void incrementGrade();
 	void decrementGrade();
-	std::ostream& operator<<(std::ostream& os, const Bureaucrat &b);
-	~Bureaucrat();
+		~Bureaucrat();
 
 	//These exception classes inherit from the standard c++ exception class
 	class GradeTooHighException : public std::exception {
@@ -36,5 +35,7 @@ class Bureaucrat
 			}
 		};
 };
+
+std::ostream& operator<<(std::ostream& os, const Bureaucrat &B);
 
 #endif

@@ -29,11 +29,11 @@ Bureaucrat& Bureaucrat::operator=(const Bureaucrat &other)
 	return (*this);
 }
 
-std::string Bureaucrat::getName()
+std::string Bureaucrat::getName() const 
 {
 	return name;
 }
-int Bureaucrat::getGrade()
+int Bureaucrat::getGrade() const
 {
 	return grade;
 }
@@ -66,6 +66,14 @@ void Bureaucrat::decrementGrade()
 	{
 		std::cerr << "Exception :" << e.what() << std::endl;
 	}
+}
+
+//Here I am not replacing ostream, I am simply extending it in order to print my Bureaucrat object data
+//I amm explicitly stating how to print the Bureaucrat object 
+std::ostream& operator<<(std::ostream& os, const Bureaucrat &B)
+{
+	os << B.getName() << ", bureaucrat grade " << B.getGrade();
+	return os;
 }
 
 Bureaucrat::~Bureaucrat()
