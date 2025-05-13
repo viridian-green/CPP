@@ -1,5 +1,5 @@
-#ifndef AFORM_HPP
-#define AFORM_HPP
+#ifndef AFORM_H
+#define AFORM_H
 
 #include "Bureaucrat.hpp"
 #include "string"
