@@ -1,6 +1,6 @@
 #include "AForm.hpp"
 
-AForm::AForm(std::string name, int gradeSign, int gradeExecute) : name(name), isSigned(0), gradeSign(gradeSign), 
+AForm::AForm(std::string name, int gradeSign, int gradeExecute) : name(name), isSigned(0), gradeSign(gradeSign),
 gradeExecute(gradeExecute)
 {
     if (gradeSign < 1 || gradeExecute < 1)
@@ -9,7 +9,7 @@ gradeExecute(gradeExecute)
         throw AForm::GradeTooLowException();
 }
 
-AForm::AForm(const AForm &other) : name(other.name), isSigned(other.isSigned), gradeSign(other.gradeSign), 
+AForm::AForm(const AForm &other) : name(other.name), isSigned(other.isSigned), gradeSign(other.gradeSign),
 gradeExecute(other.gradeExecute)
 {}
 
@@ -22,7 +22,7 @@ AForm& AForm::operator=(const AForm &other)
 	return (*this);
 }
 
-std::string AForm::getName() const 
+std::string AForm::getName() const
 {
 	return name;
 }
@@ -46,7 +46,7 @@ void AForm::beSigned(Bureaucrat &B)
 {
     if (B.getGrade() <= this->gradeSign)
         this->isSigned = 1;
-    else 
+    else
         throw GradeTooLowException();
 }
 
@@ -60,13 +60,18 @@ std::ostream& operator<<(std::ostream& os, const AForm& F)
         os << "The Aform isn't yet signed." << std::endl;
     if (F.getGradetoSign() != 0)
         os << "The grade required to sign the Aform is " << F.getGradetoSign() << std::endl;
-    else 
+    else
         os << "The grade required to sign the Aform is not yet initialized." << std::endl;
     if (F.getgradetoExecute() != 0)
         os << "The grade required to execute the Aform is " << F.getgradetoExecute() << std::endl;
-    else 
+    else
         os << "The grade required to execute the Aform is not yet initialized." << std::endl;
     return os;
+}
+
+void AForm::execute(Bureaucrat const & executor) const
+{
+	std::cout << "Form executes action" << std::endl;
 }
 
 AForm::~AForm()

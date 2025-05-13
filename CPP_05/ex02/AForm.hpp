@@ -1,5 +1,5 @@
 #ifndef AFORM_H
-# define AFORM_H
+#define AFORM_H
 
 #include "Bureaucrat.hpp"
 #include "string"
@@ -21,9 +21,10 @@ class AForm
     AForm& operator=(const AForm &other);
     ~AForm();
     std::string getName() const ;
-    bool getFormStatus() const;       
+    bool getFormStatus() const;
     int getGradetoSign() const;
     int getgradetoExecute() const;
+	virtual void execute(Bureaucrat const & executor) const;
     virtual void beSigned(Bureaucrat &b) = 0;
 
     class GradeTooHighException : public std::exception {

@@ -1,13 +1,89 @@
 #include "ShrubberyCreationForm.hpp"
 
-ShrubberyCreationForm::ShrubberyCreationForm(const std::string name) : AForm("ShrubberyCreationForm", 145, 137)
+ShrubberyCreationForm::ShrubberyCreationForm(const std::string target) : AForm("ShrubberyCreationForm", 145, 137), target(target)
 {}
 
-ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other)
+ShrubberyCreationForm::ShrubberyCreationForm(const ShrubberyCreationForm &other) : AForm(other), target(other.target)
 {}
 
 ShrubberyCreationForm& ShrubberyCreationForm::operator=(const ShrubberyCreationForm &other)
-{}
+{
+	if (this != &other)
+	{
+		AForm::operator=(other);
+	}
+	return (*this);
+}
+
+void ShrubberyCreationForm::execute(Bureaucrat const & executor) const
+{
+	std::ofstream outFile(target + "_shrubbery");
+	if (!outFile.is_open())
+		throw std::runtime_error("Could not create file: " + target + "_shrubbery");
+	outFile <<
+"            .        +          .      .          .\n"
+"     .            _        .                    .\n"
+"  ,              /;-._,-.____        ,-----.__\n"
+" ((        .    (_:#::_.:::. `-._   /:, /-._, `._,\n"
+"  `                 \\   _|`\"=:_::.`.);  \\ __/ /\n"
+"                      ,    `./  \\:. `.   )==-'  .\n"
+"    .      ., ,-=-.  ,\\, +#./`   \\:.  / /           .\n"
+".           \\/:/`-' , ,\\ '` ` `   ): , /_  -o\n"
+"       .    /:+- - + +- : :- + + -:'  /(o-) \\)     .\n"
+"  .      ,=':  \\    ` `/` ' , , ,:' `'--\".--\"---._/`7\n"
+"   `.   (    \\: \\,-._` ` + '\\, ,\"   _,--._,---\":.__/\n"
+"              \\:  `  X` _| _,\\/'   .-'\n"
+".               \":._:`\\____  /:'  /      .           .\n"
+"                    \\::.  :\\/:'  /              +\n"
+"   .                 `.:.  /:'  }      .\n"
+"           .           ):_(:;   \\           .\n"
+"                      /:. _/ ,  |\n"
+"                   . (|::.     ,`                  .\n"
+"     .                |::.    {\\\n"
+"                      |::.\\  \\ `.\n"
+"                      |:::(\\    |\n"
+"              O       |:::/{ }  |                  (o\n"
+"               )  ___/#\\::`/ (O \"==._____   O, (O  /`\n"
+"          ~~~w/w~\"~~,\\` `:/,-(~`\"~~~~~~~~\"~o~\\~/~w|/~\n"
+"   ~~~~~~~~~~~~~~~~~~~~~~~\\\\W~~~~~~~~~~~~\\|/~~\n";
+
+outFile <<
+" _{\\ _{\\{\\/}/}/}__\n"
+"             {/{/\\}{/{/\\}(\\}{/\\} _\n"
+"            {/{/\\}{/{/\\}(_)\\}{/{/\\}  _\n"
+"         {\\{/(/}\\}{/{/\\}\\}{/){/\\}\\} /\\}\n"
+"        {/{/(_)\\}{\\{/)\\}{\\(_){/}/}/}/}\n"
+"       _{\\{/{/{\\{/{/(_)\\}/}/}{\\(/}/}/}\n"
+"      {/{/{\\{\\{\\(/}{\\{\\/}/}{\\}(_){\\/}\\}\n"
+"      _{\\{/{\\{/(_)\\}/}{/{/{/\\}\\})\\}{/\\}\n"
+"     {/{/{\\{\\(/}{/{\\{\\{\\/})/}{\\(_)/}/}\\}\n"
+"      {\\{\\/}(_){\\{\\{\\/}/}(_){\\/}{\\/}/})/}\n"
+"       {/{\\{\\/}{/{\\{\\{\\/}/}{\\{\\/}/}\\}(_)\n"
+"      {/{\\{\\/}{/){\\{\\{\\/}/}{\\{\\(/}/}\\}/}\n"
+"       {/{\\{\\/}(_){\\{\\{\\(/}/}{\\(_)/}/}\\}\n"
+"         {/({/{\\{/{\\{\\/}(_){\\/}/}\\}/}(\\}\n"
+"          (_){/{\\/}{\\{\\/}/}{\\{\\)/}/}(_)\n"
+"            {/{/{\\{\\/}{/{\\{\\{\\(_)/}\n"
+"             {/{\\{\\{\\/}/}{\\{\\\\}/}\n"
+"              {){/ {\\/}{\\/} \\}\\}\n"
+"              (_)  \\.-'.-/\n"
+"          __...--- |'-.-'| --...__\n"
+"   _...--\"   .-'   |'-.-'|  ' -.  \"\"--..__\n"
+" -\"    ' .  . '    |.'-._| '  . .  '   jro\n"
+" .  '-  '    .--'  | '-.'|    .  '  . '\n"
+"          ' ..     |'-_.-| \n"
+"  .  '  .       _.-|-._ -|-._  .  '  .\n"
+"              .'   |'- .-|   '.\n"
+"  ..-'   ' .  '.   `-._.-�   .'  '  - .\n"
+"   .-' '        '-._______.-'     '  .\n"
+"        .      ~,\n"
+"    .       .   |\\   .    ' '-.\n"
+"    ___________/  \\____________\n"
+"   /  Why is it, when you want \\\n"
+"  |  something, it is so damn   |\n"
+"  |    much work to get it?     |\n"
+"   \\___________________________/\n";
+}
 
 ShrubberyCreationForm::~ShrubberyCreationForm()
 {}

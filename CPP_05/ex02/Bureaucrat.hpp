@@ -22,6 +22,7 @@ class Bureaucrat
 	void incrementGrade();
 	void decrementGrade();
 	void signForm(AForm &F);
+	void executeForm(AForm &F);
 	~Bureaucrat();
 
 	//These exception classes inherit from the standard c++ exception class
