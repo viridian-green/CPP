@@ -46,7 +46,7 @@ void Bureaucrat::decrementGrade()
 	}
 	this->grade++;
 }
-void Bureaucrat::signForm(Form &F)
+void Bureaucrat::signForm(AForm &F)
 {
 	F.beSigned(*this);
 	if (F.getFormStatus() == 1)

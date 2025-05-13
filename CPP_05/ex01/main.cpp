@@ -1,25 +1,12 @@
 #include "Bureaucrat.hpp"
+#include "Form.hpp"
 
 int main()
 {
 	//once an exception, the rest of the code does not execute 
 	try
 	{
-	Bureaucrat Adele("Adele", -3);
-	std::cout << Adele;
-	}
-	catch (std::exception &e)
-	{
-		std::cout << e.what() << std::endl;
-	}
-	try
-	{
 	Bureaucrat Lila("Lila", 2);
-	Lila.incrementGrade();
-	Lila.decrementGrade();
-	Lila.incrementGrade();
-	Lila.incrementGrade();
-	std::cout << Lila.getGrade() << std::endl;
 	}
 	catch (std::exception &e)
 	{
@@ -27,10 +14,24 @@ int main()
 	}
 	try
 	{
-	Bureaucrat Lila("Lila", 1);
-	std::cout << Lila.getGrade() << std::endl;
-	std::cout << Lila;
-	//std::cout << Adele;
+	Form diversity("Diversity Form", 4, 2);
+	bool fstatus = diversity.getFormStatus();
+	std::cout << "Form status: " << fstatus << std::endl;	
+	std::cout << diversity;
+	Bureaucrat Bob("Bob", 5);
+	Bob.signForm(diversity);
+	diversity.beSigned(Bob);
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	try
+	{
+	Form diversity("Diversity Form", 4, 2);
+	std::cout << diversity;
+	Bureaucrat Jean("Jean", 4);
+	Jean.signForm(diversity);
 	}
 	catch (std::exception &e)
 	{

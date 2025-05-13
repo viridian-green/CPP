@@ -3,9 +3,9 @@
 
 #include "string"
 #include "iostream"
-#include "Form.hpp"
+#include "AForm.hpp"
 
-class Form;
+class AForm;
 
 class Bureaucrat
 {
@@ -21,7 +21,7 @@ class Bureaucrat
 	int getGrade() const;
 	void incrementGrade();
 	void decrementGrade();
-	void signForm(Form &F);
+	void signForm(AForm &F);
 	~Bureaucrat();
 
 	//These exception classes inherit from the standard c++ exception class

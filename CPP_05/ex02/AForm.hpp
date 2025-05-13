@@ -1,11 +1,13 @@
-#ifndef FORM_H
-# define FORM_H
+#ifndef AFORM_H
+# define AFORM_H
 
 #include "Bureaucrat.hpp"
+#include "string"
+#include "iostream"
 
 class Bureaucrat;
 
-class Form
+class AForm
 {
     private:
     std::string const name;
@@ -14,15 +16,15 @@ class Form
     int const gradeExecute;
 
     public:
-    Form(std::string name, int gradeSign, int gradeExecute);
-    Form(const Form &other);
-    Form& operator=(const Form &other);
-    ~Form();
+    AForm(std::string name, int gradeSign, int gradeExecute);
+    AForm(const AForm &other);
+    AForm& operator=(const AForm &other);
+    ~AForm();
     std::string getName() const ;
     bool getFormStatus() const;       
     int getGradetoSign() const;
     int getgradetoExecute() const;
-    void beSigned(Bureaucrat &b);
+    virtual void beSigned(Bureaucrat &b) = 0;
 
     class GradeTooHighException : public std::exception {
 		public:
@@ -34,11 +36,11 @@ class Form
 		class GradeTooLowException : public std::exception {
 		public:
 			const char* what() const noexcept override {
-				return "The Bureaucrat's grade is too low to sign the form.";
+				return "The Bureaucrat's grade is too low to sign the Aform.";
 			}
 		};
 };
 
-std::ostream& operator<<(std::ostream& os, const Form &F);
+std::ostream& operator<<(std::ostream& os, const AForm &F);
 
 #endif

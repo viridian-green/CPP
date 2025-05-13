@@ -1,7 +1,7 @@
 #include "Form.hpp"
 
-Form::Form(std::string name, int gradeSign, int gradeExecute) : name(name), isSigned(0),gradeSign(0), 
-gradeExecute(0)
+Form::Form(std::string name, int gradeSign, int gradeExecute) : name(name), isSigned(0), gradeSign(gradeSign), 
+gradeExecute(gradeExecute)
 {
     if (gradeSign < 1 || gradeExecute < 1)
         throw Form::GradeTooHighException();
@@ -32,35 +32,42 @@ bool Form::getFormStatus() const
 	return isSigned;
 }
 
-int Form::getGradeSigned() const
+int Form::getGradetoSign() const
 {
 	return gradeSign;
 }
 
-int Form::getgradeExecute() const
+int Form::getgradetoExecute() const
 {
 	return gradeExecute;
 }
 
-void Form::beSigned(Bureaucrat B)
+void Form::beSigned(Bureaucrat &B)
 {
-    if (B.getGrade() >= this->gradeSign)
-        this-> isSigned = 1;
+    if (B.getGrade() <= this->gradeSign)
+        this->isSigned = 1;
     else 
         throw GradeTooLowException();
 }
 
 
-std::ostream& operator<<(std::ostream& os, const Form& form)
+std::ostream& operator<<(std::ostream& os, const Form& F)
 {
-
+    os << F.getName() << " form:" << std::endl;
+    if (F.getFormStatus())
+        os << "The form is signed." << std::endl;
+    else
+        os << "The form isn't yet signed." << std::endl;
+    if (F.getGradetoSign() != 0)
+        os << "The grade required to sign the form is " << F.getGradetoSign() << std::endl;
+    else 
+        os << "The grade required to sign the form is not yet initialized." << std::endl;
+    if (F.getgradetoExecute() != 0)
+        os << "The grade required to execute the form is " << F.getgradetoExecute() << std::endl;
+    else 
+        os << "The grade required to execute the form is not yet initialized." << std::endl;
+    return os;
 }
 
 Form::~Form()
 {}
-
-std::ostream& operator<<(std::ostream& os, const Bureaucrat &B)
-{
-	os << B.getName() << ", bureaucrat grade " << B.getGrade();
-	return os;
-}
