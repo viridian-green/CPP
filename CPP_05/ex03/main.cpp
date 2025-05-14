@@ -12,9 +12,28 @@ int main()
 		Intern someRandomIntern;
 		AForm *rrf;
 		rrf = someRandomIntern.makeForm("robotomy request", "Bender");
-		if (rrf)
-		//I don't understand how this is implemented...
-    	std::cout << "Form created: " << rrf->getName() << ", target: ";
+		Bureaucrat Lila("Lila", 2);
+		Lila.signForm(*rrf);
+		Lila.executeForm(*rrf);
+		AForm *plantForm;
+		plantForm = someRandomIntern.makeForm("shrubberycreation", "Bush");
+		Lila.signForm(*plantForm);
+		Lila.executeForm(*plantForm);
+		delete rrf;
+	}
+	catch (std::exception &e)
+	{
+		std::cout << e.what() << std::endl;
+	}
+	try
+	{
+		Intern newIntern;
+		Bureaucrat Lila("Lila", 2);
+		AForm *pardonForm;
+		pardonForm = newIntern.makeForm("presidential pardon", "Macron");
+		Lila.signForm(*pardonForm);
+		Lila.executeForm(*pardonForm);
+		delete pardonForm;
 	}
 	catch (std::exception &e)
 	{

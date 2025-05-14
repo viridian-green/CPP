@@ -2,10 +2,14 @@
 
 Intern::Intern()
 {}
-// Intern::Intern(const Intern &other)
-// {}
-// Intern& Intern::operator=(const Intern &other)
-// {}
+
+Intern::Intern(const Intern &other)
+{}
+
+Intern& Intern::operator=(const Intern &other)
+{
+	return (*this);
+}
 
 Intern::~Intern()
 {}
@@ -36,9 +40,9 @@ AForm *Intern::makeForm(std::string formName, std::string formTarget)
 	for (int i = 0; i < 3; i++) {
 		if (formNames[i] == formName)
 		{
+			std::cout << "Intern creates " << formName  << std::endl;
 			return (this->*func_ptr[i])(formTarget);
 		}
 	}
-	std::cout << "Invalid form name: " << formName << std::endl;
-	return nullptr;
+	throw std::runtime_error("Error. Form name doesn't exist.");
 }
