@@ -15,8 +15,11 @@ class ScalarConverter
     ScalarConverter(const ScalarConverter &other);
     ScalarConverter& operator=(const ScalarConverter &other);
     ~ScalarConverter();
+    static size_t stringLength(const std::string& str);
+    static bool isPrintable(char c);
     static void convert(std::string literal);
-    static void parseInput(std::string literal);
+    static void returnType(std::string literal);
+    static bool isDigit(char c);
 
 };
 

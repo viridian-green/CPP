@@ -2,6 +2,11 @@
 
 int main()
 {
-    ScalarConverter::convert("a");
+    ScalarConverter::convert("nan");
 
 }
+/*take care of nan
+max int
+min int
+all exceptions for chars */
+
