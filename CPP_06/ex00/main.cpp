@@ -1,12 +1,22 @@
 #include "ScalarConverter.hpp"
 
-int main()
+int main(int argc, char **av)
 {
-    ScalarConverter::convert("nan");
+    // if (argc != 2)
+    // {
+    //     std::cerr << "Usage: ./ScalarTypes <literal>" << std::endl;
+    //     return 1;
+    // }
 
+    try
+    {
+        ScalarConverter::convert("é");
+    }
+    catch (const std::exception& e)
+    {
+        std::cerr << "Error: " << e.what() << std::endl;
+    }
+
+    return 0;
 }
-/*take care of nan
-max int
-min int
-all exceptions for chars */
 
