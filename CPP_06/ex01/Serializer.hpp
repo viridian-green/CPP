@@ -3,25 +3,20 @@
 
 #include <cstdint>
 #include <string>
-
-struct Data
-{
-	std::string title;
-	int publishingYear;
-};
-
+#include <iostream>
+#include "Data.hpp"
 
 class Serializer
 {
     private:
     Serializer();
-
-    public:
-	Serializer(const Serializer &other);
+    Serializer(const Serializer &other);
 	Serializer& operator=(const Serializer &other);
 	~Serializer();
-    uintptr_t serialize(Data* ptr);
-	Data* deserialize(uintptr_t raw);
+
+    public:
+    static uintptr_t serialize(Data* ptr);
+	static Data* deserialize(uintptr_t raw);
 
 };
 

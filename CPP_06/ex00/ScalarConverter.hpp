@@ -12,11 +12,11 @@ class ScalarConverter
     //so instatiating objects of that class would be pointless and misleading
     private:
     ScalarConverter();
-
-    public:
     ScalarConverter(const ScalarConverter &other);
     ScalarConverter& operator=(const ScalarConverter &other);
     ~ScalarConverter();
+
+    public:
     static size_t stringLength(const std::string& str);
     static bool isPrintable(char c);
     static void convert(std::string literal);
