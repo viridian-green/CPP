@@ -1,6 +1,6 @@
 CC = c++
 
-FLAGS = -Wall -Wextra -Werror -std=c++98 -Wshadow
+FLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC = main.cpp Bureaucrat.cpp Form.cpp
 
@@ -8,9 +8,12 @@ OBJ = $(SRC:%.cpp=%.o)
 
 RM = rm -f
 
-NAME = FormsFormsForms
+NAME = ScalarTypes
 
 all : $(NAME)
+
+%.o: %.cpp
+	$(CC) $(FLAGS) -c $< -o $@
 
 $(NAME) : $(OBJ)
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ)
@@ -24,3 +27,5 @@ fclean : clean
 re: 	fclean all
 
 .PHONY: all clean fclean re
+
+

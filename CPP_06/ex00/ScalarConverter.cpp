@@ -13,10 +13,10 @@ ScalarConverter& ScalarConverter::operator=(const ScalarConverter &other)
 ScalarConverter::~ScalarConverter()
 {}
 
-size_t ScalarConverter::stringLength(const std::string& str) 
+size_t ScalarConverter::stringLength(const std::string& str)
 {
     size_t length = 0;
-    for (char c : str) 
+    for (char c : str)
     {
         (void)c;
         length++;
@@ -24,7 +24,7 @@ size_t ScalarConverter::stringLength(const std::string& str)
     return length;
 }
 
-bool ScalarConverter::isPrintable(char c) 
+bool ScalarConverter::isPrintable(char c)
 {
     return static_cast<unsigned char>(c) >= 32 && static_cast<unsigned char>(c) <= 126;
 }
@@ -57,7 +57,7 @@ void isChar(std::string literal)
     else
         std::cout << "char : " << c << std::endl;
     std::cout << "int : " << static_cast<int>(c) << std::endl;
-    std::cout << "float : " << static_cast<float>(c) << "f" << std::endl;
+    std::cout << "float : " << std::fixed<< std::setprecision(1)<< static_cast<float>(c) << "f" << std::endl;
     std::cout << "double : " << static_cast<double>(c) << std::endl;
 }
 
@@ -75,9 +75,9 @@ void isFloat(std::string literal)
 
 void isInt(std::string literal)
 {
-    long l;
+    double l;
     try {
-        l = std::stol(literal);
+        l = std::stod(literal);
     } catch (...) {
         std::cout << "char : impossible" << std::endl;
         std::cout << "int  : impossible" << std::endl;
@@ -88,11 +88,11 @@ void isInt(std::string literal)
     if (l > INT_MAX || l < INT_MIN) {
         std::cout << "char : impossible" << std::endl;
         std::cout << "int  : impossible" << std::endl;
-        std::cout << "float : impossible" << std::endl;
-        std::cout << "double : impossible" << std::endl;
+		std::cout << "float : " << std::fixed << std::setprecision(1) << static_cast<float>(l) << "f" << std::endl;
+    	std::cout << "double : " << std::fixed << std::setprecision(1) << static_cast<double>(l) << std::endl;
         return;
     }
-    int i = stol(literal);
+    int i = stod(literal);
     if (i < 32 || i > 126 || i > INT_MAX || i < INT_MIN)
         std::cout << "char : impossible" << std::endl;
     else
@@ -114,7 +114,6 @@ void isDouble (std::string literal)
     std::cout << "double : " << std::fixed << std::setprecision(1) << d << std::endl;
 }
 
-
 void isMaxInf(std::string literal)
 {
     std::cout << "char : impossible" << std::endl;
@@ -133,7 +132,7 @@ void isMinInf(std::string literal)
 
 void ScalarConverter::returnType(std::string literal)
 {
-        if (literal.length() != 1 && !std::isdigit(literal[0]) && (literal[0] & 0x80)) 
+        if (literal.length() != 1 && !std::isdigit(literal[0]) && (literal[0] & 0x80))
             throw std::invalid_argument("Non-ASCII or non-printable character");
         if (literal == "nan" || literal == "nanf")
             isNan(literal);
@@ -141,7 +140,7 @@ void ScalarConverter::returnType(std::string literal)
             isMaxInf(literal);
         else if (literal == "-inf" || literal == "-inff")
             isMinInf(literal);
-        
+
         if (stringLength(literal) == 1 && isPrintable(literal[0]) && !isDigit(literal[0]))
             return isChar(literal);
         size_t i = 0;

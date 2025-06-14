@@ -2,8 +2,8 @@
 
 int main()
 {
-    //srand changes the 'seed' of the rand function 
-    std::srand(static_cast<unsigned int>(std::time(nullptr)));
+    //srand changes the 'seed' of the rand function
+    std::srand(static_cast<unsigned int>(time(nullptr)));
     Base* ptr = Base::generate();
     std::cout << "Generated type: ";
     ptr->identify(ptr);

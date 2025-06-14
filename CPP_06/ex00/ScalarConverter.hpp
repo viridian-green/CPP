@@ -4,11 +4,11 @@
 #include <iostream>
 #include <string>
 #include <iomanip> //for the static casting
-#include <limits>
+#include <climits>
 
 class ScalarConverter
 {
-    //the ScalarConverter class doesn't store or manage any data 
+    //the ScalarConverter class doesn't store or manage any data
     //so instatiating objects of that class would be pointless and misleading
     private:
     ScalarConverter();

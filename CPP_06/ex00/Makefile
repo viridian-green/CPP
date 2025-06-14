@@ -12,6 +12,9 @@ NAME = ScalarTypes
 
 all : $(NAME)
 
+%.o: %.cpp
+	$(CC) $(FLAGS) -c $< -o $@
+
 $(NAME) : $(OBJ)
 	$(CC) $(FLAGS) -o $(NAME) $(OBJ)
 
