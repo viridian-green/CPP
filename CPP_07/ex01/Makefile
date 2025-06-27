@@ -4,6 +4,8 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC = main.cpp
 
+SRC := $(addprefix src/, $(SRC))
+
 OBJ = $(SRC:%.cpp=%.o)
 
 RM = rm -f

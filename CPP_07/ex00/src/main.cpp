@@ -1,4 +1,4 @@
-#include "Template.hpp"
+#include "../incl/Template.hpp"
 #include <iostream>
 
 int main()
