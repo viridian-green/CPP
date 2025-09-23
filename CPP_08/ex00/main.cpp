@@ -13,18 +13,15 @@ int main()
 	v1.push_back(5);
 	v1.push_back(6);
 	v1[0] = 24;
-
 	v1.push_back(5);
 	v1.push_back(6);
-
 	easyfind(v1, 24);
 
 	std::list<int> v2 = {1, 2, 3, 4};
-
 	v2.push_back(5);
 	v2.push_back(6);
-
 	easyfind(v2, 24);
+
 	}
 	catch(const std::exception& e)
 	{
@@ -45,7 +42,7 @@ int main()
 		std::cerr << e.what() << '\n';
 	}
 
-		try
+	try
 	{
 		std::deque<int> v2 = {1, 2, 3, 4};
 
