@@ -1,5 +1,10 @@
 #pragma once
+#include <stdexcept>
+#include <iostream>
+#include <algorithm>
 #include <vector>
+#include <numeric>
+#include <climits>
 
 class Span
 {
@@ -13,7 +18,7 @@ class Span
 	Span(const Span &oth);
 	Span &operator=(const Span &oth);
 	~Span();
-
+	void addNumbers(std::vector<int>::iterator begin, std::vector<int>::iterator end);
 	void addNumber(int newNumber);
 	int shortestSpan();
 	int longestSpan();

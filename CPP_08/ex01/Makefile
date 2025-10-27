@@ -1,8 +1,10 @@
 CXX = c++
 
 FLAGS = -Wall -Wextra -Werror -std=c++98
+# FLAGS = -std=c++17
 
-SRC = main.cpp
+# SRC = SpanTest.cpp
+SRC = main1.cpp
 
 OBJ = $(SRC:%.cpp=%.o)
 
