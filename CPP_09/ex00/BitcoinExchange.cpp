@@ -1,50 +1,102 @@
 #include "BitcoinExchange.hpp"
 
-BitcoinExchange::BitcoinExchange(const BitcoinExchange &oth)
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &oth) : m_value(oth.m_value)
+// , m_int_value(oth.m_int_value)
+{}
+BitcoinExchange &BitcoinExchange::operator=(const BitcoinExchange &oth)
 {
-
+	if (this != &oth)
+	{
+		m_value = oth.m_value;
+		// m_int_value = oth.m_int_value;
+	}
+	return *this;
 }
-	// BitcoinExchange &operator=(const BitcoinExchange &oth);
-	BitcoinExchange::BitcoinExchange(){}
-	BitcoinExchange::~BitcoinExchange(){}
+BitcoinExchange::BitcoinExchange(){}
+BitcoinExchange::~BitcoinExchange(){}
 
-void BitcoinExchange::resetValues() {
-	m_float_value = 0;
-	m_int_value = 0;
+void BitcoinExchange::resetValues() {;
+	m_value = 0;
+	m_error_message.clear();
+	m_date.clear();
+	m_result = 0;
 }
 
+void BitcoinExchange::addDatabaseEntry(const std::string &date, const double &price) {
+	m_database.insert(std::make_pair(date, price));
+}
+
+std::string BitcoinExchange::trim(const std::string &s) {
+	size_t start = 0;
+	while (start < s.length() && std::isspace(s[start]))
+		++start;
+	size_t end = s.length();
+	while (end > start && std::isspace(s[end - 1]))
+		--end;
+	return s.substr(start, end - start);
+}
 
 void BitcoinExchange::parseLine(std::string line) {
 	resetValues();
 	size_t first_space = line.find(' ');
-	size_t second_space = line.find(' ', first_space + 1);
+	size_t pipe_pos = line.find('|');
+	size_t second_space = line.find(' ', pipe_pos + 1);
 
-	if (first_space == std::string::npos || second_space == std::string::npos)
+	if (first_space == std::string::npos || pipe_pos == std::string::npos || second_space == std::string::npos )
 	{
-		std::cout << "Error. Format of each line should be 'date | value'" << std::endl;
+		std::cout << "Error: format of each line should be 'date | value'" << std::endl;
 		return;
 	}
 
-	std::string date = line.substr(0, first_space);
-	std::string value = line.substr(second_space + 1);
-	if (parseDate(date) && parseValue(value))
+	std::string date = trim(line.substr(0, first_space));
+	std::string value = trim(line.substr(second_space + 1));
+	if (isValidDate(date) && parseValue(value))
 		calculateExchange();
+	else
+		std::cout << "Error : " << m_error_message << line << std::endl;
 }
 
 void BitcoinExchange::calculateExchange() {
+	std::map<std::string, double>::iterator it = m_database.lower_bound(m_date);
+	if (it == m_database.end()) //if all values are lower than m_date, chose closest lower
+		it--;
+	else if (it->first != m_date  && it != m_database.begin()) //if no values matches we choose the closest lower
+		it--;
+	m_result = m_value * it->second;
+	std::cout << m_date << " => " << m_value << " = " << m_result << std::endl;
 
 }
 
-int BitcoinExchange::parseDate(std::string s) {
-	size_t first_hyphen = s.find('-');
-	size_t second_hyphen = s.find('-', first_hyphen + 1);
+int BitcoinExchange::isValidDate(std::string date_str) {
+	if (date_str.size() != 10 || date_str[4] != '-' || date_str[7] != '-')
+        return 0;
 
-	if (first_hyphen == std::string::npos || second_hyphen == std::string::npos)
-		std::cout << "Error: bad formatting of the date. It should be 'Year-Month-Day'." << std::endl;
-	int month = std::atoi(s.substr(first_hyphen, second_hyphen).c_str());
-	int day;
-	// std::cerr << "Error: bad input" << s << std::endl;
+    std::string yearStr = date_str.substr(0, 4);
+    std::string monthStr = date_str.substr(5, 2);
+    std::string dayStr = date_str.substr(8, 2);
 
+    for (size_t i = 0; i < 4; ++i)
+	{
+        if (!std::isdigit(yearStr[i]))
+			return 0;
+	}
+    for (size_t i = 0; i < 2; ++i)
+	{
+        if (!std::isdigit(monthStr[i]) || !std::isdigit(dayStr[i]))
+			return 0;
+	}
+
+    int year = std::atoi(yearStr.c_str());
+    int month = std::atoi(monthStr.c_str());
+    int day = std::atoi(dayStr.c_str());
+
+	if (month < 1 || month > 12)
+		return 0;
+	if (day < 1 || day > 31)
+		return 0;
+	if (year > 2025)
+		return 0;
+	m_date = date_str;
 	return 1;
 }
 
@@ -53,76 +105,38 @@ bool BitcoinExchange::isValidFloat(const std::string &s) {
     	return std::regex_match(s, floatPattern);
 }
 
-bool BitcoinExchange::isValidInt(const std::string &s) {
-    try {
-        size_t pos;
-        long val = std::stol(s, &pos); // use long to catch out-of-range before narrowing
-
-        if (pos != s.size()) {
-            std::cerr << "Error: invalid characters in number: " << s << std::endl;
-            return false;
-        }
-
-        if (val > INT_MAX || val < INT_MIN) {
-            std::cerr << "Error: Value out of int bounds: " << s << std::endl;
-            return false;
-        }
-
-        m_int_value = static_cast<int>(val);
-        return true;
-
-    } catch (const std::exception &e) {
-        std::cerr << "Error: invalid integer: " << s << std::endl;
-        return false;
-    }
-}
 
 bool BitcoinExchange::isNumber(const std::string& s) {
 	size_t pos;
 	long val = std::stol(s, &pos);
 
 	 if (val > INT_MAX || val < INT_MIN) {
-            std::cerr << "Error: Value out of int bounds: " << s << std::endl;
+            m_error_message = "value out of int bounds: ";
             return false;
         }
 
     std::string::const_iterator it = s.begin();
 
-
     while (it != s.end() && std::isdigit(*it)) ++it;
     	return !s.empty() && it == s.end();
 }
 
-int BitcoinExchange::parseValue(std::string s) {
+int BitcoinExchange::parseValue(std::string value_str) {
 
-	if (isNumber(s.c_str()))
+	double value = std::atof(value_str.c_str());
+
+	if (value < 0)
 	{
-		std::cout << "test" <<
-		m_int_value = atoi(s.c_str());
-		// if (m_int_value == INT_MAX || m_int_value == INT_MIN)
-		// {
-		// 	std::cout << "Error: Value is out of bounds: " << s << std::endl;
-		// 	return 0;
-		// }
+		m_error_message = "not a positive number: ";
+		return 0;
 	}
-	else if (isValidFloat(s))
-		m_float_value = std::stof(s);
-	else
+	else if (value > 1000)
 	{
-		std::cout << "Error: Value should be a positive number from 0 to 1000: " << s << std::endl;
+		m_error_message = "too large a number: ";
 		return 0;
 	}
 
-	if (m_float_value < 0 || m_int_value < 0)
-	{
-		std::cout << "Error: not a positive number: " << s << std::endl;
-		return 0;
-	}
-	else if (m_float_value > 1000 || m_int_value > 1000)
-	{
-		std::cout << "Error: too large a number: " << s << std::endl;
-		return 0;
-	}
+	m_value = value;
 
 	return 1;
 }

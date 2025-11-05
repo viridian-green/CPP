@@ -8,15 +8,39 @@ int main(int ac, char **av)
 
 	BitcoinExchange bce;
 
-	std::ifstream inFile(av[1]);
-	if (!inFile.is_open())
-		std::cerr << "Error. Could not open file" << std::endl;
-	std::string line;
-	if (getline(inFile, line)) //Skipping the first line which declares the format
-	{
-		while (getline(inFile, line))
-			bce.parseLine(line);
-	}
-	inFile.close();
+	std::ifstream db_file("data.csv");
 
+	if (!db_file.is_open()) {
+		std::cerr << "Error: could not open data.csv" << std::endl;
+		return 1;
+    }
+
+	std::string line;
+	getline(db_file, line);
+	while (getline(db_file, line))
+	{
+		size_t comma = line.find(',');
+		bce.addDatabaseEntry(line.substr(0, comma), std::atof(line.substr(comma + 1).c_str()));
+	}
+	db_file.close();
+
+	std::ifstream input_file(av[1]);
+	if (!input_file.is_open())
+	{
+		std::cerr << "Error. Could not open file" << std::endl;
+		return 1;
+	}
+
+	getline(input_file, line); //Skipping the first line which declares the format
+		while (getline(input_file, line))
+		{	try
+			{
+				bce.parseLine(line);
+			}
+			catch(const std::exception& e)
+			{
+				std::cerr << e.what() << '\n';
+			}
+		}
+	input_file.close();
 }
