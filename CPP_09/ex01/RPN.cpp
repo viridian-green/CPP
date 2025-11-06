@@ -19,8 +19,13 @@
 		{
 			if (std::isdigit(token[0]))
 			{
-				if (std::atoi(token.c_str()) <= 10)
+				if (std::atoi(token.c_str()) < 10)
 					rpn_stack.push(std::atoi(token.c_str()));
+				else
+				{
+					std::cerr << "Error. Numbers should be lower than 10" << std::endl;
+					return 1;
+				}
 			}
 			else if (token == "+" || token == "-" || token == "/" || token == "*")
 			{
@@ -30,19 +35,15 @@
 					return 1;
 				}
 
-				std::cout << token[0] << std::endl;
-				std::cout << token[1];
 				int a = rpn_stack.top();
 				rpn_stack.pop();
 				int b = rpn_stack.top();
 				rpn_stack.pop();
 
-
-
 				if (token == "+")
-					m_result = a + b;
+					m_result = b + a;
 				else if (token == "-")
-					m_result = a - b;
+					m_result = b - a;
 				else if (token == "/")
 				{
 					if (b == 0)
@@ -51,10 +52,10 @@
 						return 1;
 					}
 					else
-						m_result = a / b;
+						m_result = b / a;
 				}
 				else if (token == "*")
-					m_result = a * b;
+					m_result = b * a;
 				rpn_stack.push(m_result);
 
 			}
@@ -63,24 +64,7 @@
 				std::cerr << "Error: invalid token: " << token << std::endl;
 				return 1;
 			}
-			// while(!rpn_stack.empty())
-			// {
-			// 	std::stack s = rpn_stack.top();
-			// 	std::cout << w;
-			// 	rpn_stack.pop();
-			// }
-
-
-
 			}
-			std::stack<int> temp = rpn_stack; // make a copy, so we don’t destroy the original
-			while (!temp.empty()) {
-				std::cout << temp.top() << " ";
-				temp.pop();
-			}
-			std::cout << std::endl;
 			std::cout << m_result << std::endl;
 			return 0;
-
-
 	}
