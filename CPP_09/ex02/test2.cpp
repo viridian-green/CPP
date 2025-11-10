@@ -7,6 +7,11 @@ struct Pair {
     int b;  // pending element (smaller)
 };
 
+std::ostream& operator<<(std::ostream& os, const Pair& p) {
+    os << "(" << p.a << ", " << p.b << ")";
+    return os;
+}
+
 // Binary insertion helper
 void insertInSortedOrder(std::vector<int>& vec, int value) {
     auto pos = std::lower_bound(vec.begin(), vec.end(), value);
@@ -30,14 +35,22 @@ std::vector<int> fordJohnsonSort(std::vector<Pair>& pairs) {
         return {pairs[0].a};
     }
 
+
     // 1. Extract main chain (a's) and pair them recursively
-    std::vector<Pair> nextLevelPairs;
-    for (size_t i = 0; i + 1 < pairs.size(); i += 2) {
-        if (pairs[i].a > pairs[i+1].a)
-            nextLevelPairs.push_back({pairs[i].a, pairs[i].b});
-        else
-            nextLevelPairs.push_back({pairs[i+1].a, pairs[i+1].b});
-    }
+ std::vector<Pair> nextLevelPairs;
+std::vector<int> pendings; // store smaller "a"s for later insertion
+
+for (size_t i = 0; i + 1 < pairs.size(); i += 2) {
+    Pair bigger = pairs[i];
+    Pair smaller = pairs[i + 1];
+
+    if (smaller.a > bigger.a)
+        std::swap(bigger, smaller);
+
+    nextLevelPairs.push_back(bigger);
+    pendings.push_back(smaller.a);
+	pendings.push_back(smaller.b); // keep smaller main element for later
+}
 
     // Handle odd leftover
     Pair leftover;
@@ -49,32 +62,38 @@ std::vector<int> fordJohnsonSort(std::vector<Pair>& pairs) {
 
     // 2. Reorder current level pairs according to sorted mains
     std::vector<Pair> orderedPairs;
-    for (int val : sortedMains) {
-        for (auto it = pairs.begin(); it != pairs.end(); ++it) {
-            if (it->a == val) {
-                orderedPairs.push_back(*it);
-                pairs.erase(it);
-                break;
-            }
+std::vector<bool> used(pairs.size(), false);
+
+for (int val : sortedMains) {
+    for (size_t i = 0; i < pairs.size(); ++i) {
+        if (!used[i] && pairs[i].a == val) {
+            orderedPairs.push_back(pairs[i]);
+            used[i] = true;
+            break;
         }
     }
-    if (hasLeftover) orderedPairs.push_back(leftover);
+}
+    if (hasLeftover && leftover.a != leftover.b)
+    	orderedPairs.push_back(leftover);
 
-    // 3. Insert pending elements (b's) in Jacobsthal order
-    std::vector<int> result;
-    for (auto& p : orderedPairs) result.push_back(p.a);
+	std::vector<int> result;
+for (auto& p : orderedPairs)
+    result.push_back(p.a);
 
-    std::vector<int> order = jacobsthalOrder(orderedPairs.size());
-    for (int idx : order) {
-        if (idx < orderedPairs.size())
-            insertInSortedOrder(result, orderedPairs[idx].b);
-    }
+std::vector<int> order = jacobsthalOrder(orderedPairs.size());
+for (int idx : order) {
+    if (idx < orderedPairs.size())
+        insertInSortedOrder(result, orderedPairs[idx].b);
+}
 
-    return result;
+// also insert pendings
+	for (int val : pendings)
+		insertInSortedOrder(result, val);
+	return result;
 }
 
 int main() {
-    std::vector<int> input = {8, 5, 3, 7, 2, 4};
+    std::vector<int> input = {3, 5, 9, 7, 4};
 
     // Form pairs
     std::vector<Pair> pairs;
@@ -84,10 +103,15 @@ int main() {
         else
             pairs.push_back({input[i+1], input[i]});
     }
+
     // Handle leftover
     if (input.size() % 2 == 1) {
         pairs.push_back({input.back(), input.back()}); // duplicate a for leftover
     }
+
+	// for (Pair p : pairs) std::cout << p << " ";
+    // std::cout << "\n";
+
 
     // Sort
     std::vector<int> sorted = fordJohnsonSort(pairs);
