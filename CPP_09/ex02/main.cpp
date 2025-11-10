@@ -14,5 +14,7 @@ int main(int ac, char **av)
 		std::cerr << "Error. You must input a positive integer sequence" << std::endl;
 		return 1;
 	}
-	// ms.VecAlgorithm();
+
+	ms.vectorAlgo();
+
 }
