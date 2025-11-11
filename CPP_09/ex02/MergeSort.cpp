@@ -15,38 +15,10 @@ std::ostream& operator<<(std::ostream& os, const Pair& p) {
     return os;
 }
 
-void MergeSort::vectorAlgo()
+std::vector<int> MergeSort::getResult()
 {
-	if (m_vec_sequ.size() == 1)
-	{
-		printResult(m_vec_sequ);
-		return;
-	}
-
-	//Sort while creating initial pairs
-	std::vector<Pair> pairs;
-	for (size_t i = 0; i + 1 < m_vec_sequ.size(); i += 2) {
-		if (m_vec_sequ[i] > m_vec_sequ[i + 1])
-			pairs.push_back({m_vec_sequ[i], m_vec_sequ[i + 1]});
-		else
-			pairs.push_back({m_vec_sequ[i + 1], m_vec_sequ[i]});
-	}
-
-	//  for (Pair x : pairs) {
-	// std::cout << x << " ";
-	// }
-
-	if (m_vec_sequ.size() % 2 == 1)
-		m_has_leftover = 1;
-
-	if (m_has_leftover)
-		m_leftover = m_vec_sequ.back();
-	else
-		m_leftover = -1;
-
-	std::vector<int> sorted = vecJohnsonSort(pairs, m_has_leftover, m_leftover);
+	return m_result;
 }
-
 
 void insertInSortedOrder(std::vector<int>& vec, int value) {
     auto pos = std::lower_bound(vec.begin(), vec.end(), value);
@@ -68,7 +40,7 @@ std::vector<int> jacobsthalOrder(int n) {
         if (std::find(order.begin(), order.end(), i) == order.end())
             order.push_back(i);
     return order;
-}
+};
 
 void MergeSort::printResult(std::vector<int> v)
 {
@@ -85,81 +57,117 @@ void MergeSort::printResult(std::vector<int> v)
 	std::cout << "\n";
 
 	//TODO: Implement the printing of the time
+}
 
+
+void MergeSort::vectorAlgo()
+{
+	if (m_vec_sequ.size() == 1)
+	{
+		printResult(m_vec_sequ);
+		return;
+	}
+
+	//Step 1 + 2 : Sort while creating initial pairs
+	std::vector<Pair> pairs;
+	for (size_t i = 0; i + 1 < m_vec_sequ.size(); i += 2) {
+		if (m_vec_sequ[i] > m_vec_sequ[i + 1])
+			pairs.push_back({m_vec_sequ[i], m_vec_sequ[i + 1]});
+		else
+			pairs.push_back({m_vec_sequ[i + 1], m_vec_sequ[i]});
+	}
+
+	//  for (Pair x : pairs) {
+	// std::cout << x << " ";
+	// }
+
+	if (m_vec_sequ.size() % 2 == 1)
+		m_has_leftover = 1;
+
+	if (m_has_leftover)
+		m_leftover = m_vec_sequ.back();
+	else
+		m_leftover = -1;
+
+	std::vector<int> sorted = vecJohnsonSort(m_vec_sequ, m_has_leftover, m_leftover);
 }
 
 // Recursion
-std::vector<int> MergeSort::vecJohnsonSort(std::vector<Pair>& pairs, bool hasLeftover, int leftoverValue) {
+std::vector<int> MergeSort::vecJohnsonSort(std::vector<int>& mains, bool hasLeftover, int leftoverValue) {
 
 	// Base case
-	if (pairs.size() == 1) {
-		std::vector<int> base = {pairs[0].a, pairs[0].b};
-		std::sort(base.begin(), base.end());
-		if (hasLeftover)
-			insertInSortedOrder(base, leftoverValue);
-		printResult(base);
+	if (mains.size() == 1) {
+		std::vector<int> base = mains;
+        if (hasLeftover)
+            insertInSortedOrder(base, leftoverValue);
+        return base;
 		return (base);
 	}
 
-    std::vector<Pair> nextLevelPairs;
-    std::vector<int> pendings;
+	std::vector<int> nextLevel; //main chain
+	std::vector<int> pendings; //pend chain: vector of individual numbers
 
-    // Step 1: pair up and split into bigger/smaller
-    for (size_t i = 0; i + 1 < pairs.size(); i += 2) {
-        Pair bigger = pairs[i];
-        Pair smaller = pairs[i + 1];
-
-        if (smaller.a > bigger.a)
-            std::swap(bigger, smaller);
-
-        nextLevelPairs.push_back(bigger);
-        pendings.push_back(smaller.a);
-        pendings.push_back(smaller.b);
+	//These pairs are already sorted, with .a being the bigger element and .b the smaller
+	// Step 3: Compare .a and .a + 1, swap and send lower number to pend chain
+	 for (size_t i = 0; i + 1 < mains.size(); i += 2) {
+        int left = mains[i];
+        int right = mains[i + 1];
+        if (right > left) std::swap(left, right);
+        nextLevel.push_back(left);
+        pendings.push_back(right);
     }
 
-    // Step 2: handle odd leftover pair at this level
-    bool newHasLeftover = pairs.size() % 2 == 1;
-    int newLeftover = newHasLeftover ? pairs.back().a : -1;
+    bool newLeftover = mains.size() % 2 == 1;
+    int newLeftoverValue = newLeftover ? mains.back() : -1;
 
-    // Step 3: recursively sort next level
-    std::vector<int> sortedMains = vecJohnsonSort(nextLevelPairs, newHasLeftover, newLeftover);
+    std::vector<int> sortedMains = vecJohnsonSort(nextLevel, newLeftover, newLeftoverValue);
 
-    // Step 4: reorder this level according to sorted mains
-    std::vector<Pair> orderedPairs;
-    std::vector<bool> used(pairs.size(), false);
 
-    for (int val : sortedMains) {
-        for (size_t i = 0; i < pairs.size(); ++i) {
-            if (!used[i] && pairs[i].a == val) {
-                orderedPairs.push_back(pairs[i]);
-                used[i] = true;
-                break;
-            }
-        }
-    }
+	for (int x : sortedMains) {
+		std::cout << x << " ";
+	}std::cout << "\n";
 
-    // Step 5: build final result
-    std::vector<int> result;
-    for (auto& p : orderedPairs)
-        result.push_back(p.a);
+		for (int x : pendings) {
+		std::cout << x << "->> ";
+	}std::cout << "\n";
 
-    // Jacobsthal order insertions
-    std::vector<int> order = jacobsthalOrder(orderedPairs.size());
-    for (int idx : order) {
-        if (idx < (int)orderedPairs.size())
-            insertInSortedOrder(result, orderedPairs[idx].b);
-    }
+    // // Step 6: reorder this level according to sorted mains
+    // std::vector<Pair> orderedPairs;
+    // std::vector<bool> used(mains.size(), false);
 
-    // Insert all pendings
-    for (int val : pendings)
-        insertInSortedOrder(result, val);
+//     for (int val : sortedMains) {
+//         for (size_t i = 0; i < mains.size(); ++i) {
+//             if (!used[i] && mains[i].a == val) {
+//                 orderedPairs.push_back(mains[i]);
+//                 used[i] = true;
+//                 break;
+//             }
+//         }
+//     }
 
-    // Finally, insert leftover from upper level
-    if (hasLeftover)
-        insertInSortedOrder(result, leftoverValue);
+//     // Step 5: build final result
+//     std::vector<int> result;
+//     for (auto& p : orderedPairs)
+//         result.push_back(p.a);
 
-	printResult(result);
-    return (result);
+//     // Jacobsthal order insertions
+//     std::vector<int> order = jacobsthalOrder(orderedPairs.size());
+//     for (int idx : order) {
+//         if (idx < (int)orderedPairs.size())
+//             insertInSortedOrder(result, orderedPairs[idx].b);
+//     }
+
+//     // Insert all pendings
+//     for (int val : pendings)
+//         insertInSortedOrder(result, val);
+
+//     // Finally, insert the leftover from original input
+//     if (hasLeftover)
+//         insertInSortedOrder(result, leftoverValue);
+
+// 	// printResult(result);
+// 	m_result = result;
+    return (sortedMains);
 }
 
 int MergeSort::parseInput(int ac, char **arg) {
@@ -182,3 +190,15 @@ int MergeSort::parseInput(int ac, char **arg) {
 	return 0;
 
 };
+
+// 	for (int idx : jacobsthalOrder(orderedPairs.size())) {
+//     int b = orderedPairs[idx].b;
+//     int a = orderedPairs[idx].a;
+
+//     // find position of 'a' in result
+//     auto a_pos = std::find(result.begin(), result.end(), a);
+
+//     // insert 'b' only up to a_pos
+//     auto pos = std::lower_bound(result.begin(), a_pos, b);
+//     result.insert(pos, b);
+// }
