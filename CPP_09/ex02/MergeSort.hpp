@@ -34,7 +34,7 @@ class MergeSort{
 	void VecJohnsonFord();
 	void vectorAlgo();
 	void sort();
-	std::vector<int> vecJohnsonSort(std::vector<int>& pairs, bool hasLeftover, int leftoverValue);
+	std::vector<int> vecJohnsonSort(std::vector<Pair>& pairs, bool hasLeftover, int leftoverValue);
 	void printResult(std::vector<int> v);
 	std::vector<int> getResult();
 	// void JacobstahlInsert();
