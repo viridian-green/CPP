@@ -23,6 +23,9 @@ class MergeSort{
 	int m_leftover = -1;
 	int m_has_newleftover = -1;
 	int m_newleftover = -1;
+	std::vector<Pair> pairs;
+	// std::vector<int> main_chain; // bigger number from the pair
+	// std::vector<int> pend_chain;  // smaller number from the pair
 
 	public:
 	MergeSort();
@@ -34,8 +37,11 @@ class MergeSort{
 	void VecJohnsonFord();
 	void vectorAlgo();
 	void sort();
-	std::vector<int> vecJohnsonSort(std::vector<Pair>& pairs, bool hasLeftover, int leftoverValue);
+	std::vector<int> vecJohnsonSort(std::vector<int> main_chain, bool hasLeftover, int leftoverValue);
 	void printResult(std::vector<int> v);
+	void makePairs(const std::vector<int>& sequence,
+                          std::vector<int>& main_chain,
+                          std::vector<int>& pend_chain);
 	std::vector<int> getResult();
 	// void JacobstahlInsert();
 
