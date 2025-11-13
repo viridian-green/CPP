@@ -12,37 +12,121 @@
 struct Pair {
     int a; //bigger number: on the left of pair
     int b; //smaller number: on the right of pair
-};
+}; //DO WE STILL NEED THIS?
 
-
+template <typename Container>
 class MergeSort{
-	std::vector<int> m_vec_sequ;
-	std::deque<int> m_deque_sequ;
-	std::vector<int> m_result;
-	int m_has_leftover;
-	int m_leftover = -1;
-	int m_has_newleftover = -1;
-	int m_newleftover = -1;
+    Container m_sequence;
+	Container m_result;
 	std::vector<Pair> pairs;
 	// std::vector<int> main_chain; // bigger number from the pair
 	// std::vector<int> pend_chain;  // smaller number from the pair
 
 	public:
-	MergeSort();
+	// MergeSort();
 	// MergeSort(const MergeSort &oth);
 	// MergeSort &operator=(const MergeSort &oth);
 	// ~MergeSort();
 	void initContainers(const std::set<int>& input);
 	int parseInput(int ac, char **arg);
 	void VecJohnsonFord();
-	void vectorAlgo();
 	void sort();
-	std::vector<int> vecJohnsonSort(std::vector<int> main_chain, bool hasLeftover, int leftoverValue);
+	Container FJalgo();
 	void printResult(std::vector<int> v);
-	void makePairs(const std::vector<int>& sequence,
-                          std::vector<int>& main_chain,
-                          std::vector<int>& pend_chain);
-	std::vector<int> getResult();
+    void mergeSort(const Container& input, Container& main_chain,  Container& pend_chain);
+    void binarySearch();
+	Container getResult();
+    Container getInput();
 	// void JacobstahlInsert();
 
 };
+
+template <typename Container>
+void MergeSort<Container>::mergeSort(const Container& input, Container& main_chain,  Container& pend_chain)
+{
+    typedef typename Container::const_iterator const_it;
+    typedef typename Container::value_type value_type;
+
+    if (input.size() <= 2) {
+        // for very small inputs just copy into main_chain
+        for (const_it it = input.begin(); it != input.end(); ++it)
+            main_chain.push_back(*it);
+        return;
+    }
+
+    const_it it = input.begin();
+    while (it != input.end()) {
+        value_type first = *it;
+        ++it;
+        if (it == input.end()) {
+            pend_chain.push_back(first);
+            break;
+        }
+        value_type second = *it;
+        ++it;
+        if (first < second)
+            std::swap(first, second);
+        main_chain.push_back(first);
+        pend_chain.push_back(second);
+    }
+}
+
+template <typename Container>
+Container MergeSort<Container>::FJalgo() {
+
+    Container main_chain;
+    Container pend_chain;
+    mergeSort(m_sequence, main_chain, pend_chain);
+
+     for (typename Container::value_type x : main_chain) {
+        std::cout << x << ". ";
+    } std::cout << "\n";
+
+         for (typename Container::value_type x : pend_chain) {
+        std::cout << x << "< ";
+    } std::cout << "\n";
+
+    return (main_chain);
+}
+
+template <typename Container>
+void MergeSort<Container>::printResult(std::vector<int> v)
+{
+	std::cout << "Before: ";
+	for (int x : m_sequence) {
+		std::cout << x << " ";
+	}
+	std::cout << "\n";
+
+	std::cout << "After: ";
+	for (int x : v) {
+		std::cout << x << " ";
+	}
+	std::cout << "\n";
+
+	//TODO: Implement the printing of the time
+}
+
+template <typename Container>
+int MergeSort<Container>::parseInput(int ac, char **arg) {
+
+	for (int i = 1; i < ac; i++)
+	{
+		std::string token = arg[i];
+		if (::isdigit(token[0]))
+		{
+			int value = std::stoi(token.c_str());
+			if (std::find(m_sequence.begin(), m_sequence.end(), value) == m_sequence.end()  && value >= 0)
+			{
+				m_sequence.push_back(std::atoi(token.c_str()));
+			}
+		}
+		else
+			return 1;
+	}
+    if (m_sequence.size() == 1)
+        printResult(m_sequence);
+	return 0;
+};
+
+
