@@ -18,7 +18,7 @@ int main(int ac, char **av)
 
 	vec.FJalgo();
     // deq.FJalgo();
-	// vec.printResult(vec.getResult());
+	vec.printResult();
 
 
 //TODO: Debug for the number of operations

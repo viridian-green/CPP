@@ -19,7 +19,7 @@ template <typename Container>
 class MergeSort{
 
 	public:
-	// MergeSort();
+	MergeSort();
 	// MergeSort(const MergeSort &oth);
 	// MergeSort &operator=(const MergeSort &oth);
 	// ~MergeSort();
@@ -29,7 +29,7 @@ class MergeSort{
 	void VecJohnsonFord();
 	void sort();
 	void FJalgo();
-	void printResult(std::vector<int> v);
+	void printResult();
     void mergeSort(Container& input, Container& main_chain,  Container& pend_chain);
     void binarySearch();
 	Container getResult();
@@ -39,13 +39,15 @@ class MergeSort{
     private:
     Container m_sequence;
 	Container m_result;
-	// Container::<std::Pair<int, int>> pairs;
-     std::vector<Pair> pairs;
+    std::vector<Pair> pairs;
+    // Container::<std::Pair<int, int>> pairs;
     int form_pairs = -1;
-	// std::vector<int> main_chain; // bigger number from the pair
-	// std::vector<int> pend_chain;  // smaller number from the pair
 
 };
+
+
+template <typename Container>
+MergeSort<Container>::MergeSort() : m_result{-1} {}
 
 template <typename Container>
 Container MergeSort<Container>::jacobsthalOrder(size_t n) {
@@ -75,33 +77,30 @@ Container MergeSort<Container>::jacobsthalOrder(size_t n) {
 template <typename Container>
 void MergeSort<Container>::mergeSort(Container& input, Container& main_chain,  Container& pend_chain)
 {
+    auto it = input.begin();
+    while (it != input.end()) {
+        auto first = *it;
+        ++it;
+          if (it == input.end()) {
+            pend_chain.push_back(first);
+            break;
+        }
         if (input.size() == 3)
         {
             pend_chain.push_back(input.back());
             input.pop_back();
         }
-        auto it = input.begin();
-        while (it != input.end()) {
-
-        auto first = *it;
-        ++it;
-        if (it == input.end()) {
-            pend_chain.push_back(first);
-            break;
-        }
-
         auto second = *it;
         ++it;
         if (first < second)
             std::swap(first, second);
-        main_chain.push_back(first);
-        pend_chain.push_back(second);
         if (input.size() <= 2) {
             main_chain.push_back(second);
             main_chain.push_back(first);
             return;
         }
-
+        main_chain.push_back(first);
+        pend_chain.push_back(second);
         // if (!form_pairs)
         // {
             // Pair p;
@@ -118,9 +117,11 @@ void MergeSort<Container>::mergeSort(Container& input, Container& main_chain,  C
     pend_chain.insert(pend_chain.end(), new_pend.begin(), new_pend.end());
 }
 
-
 template <typename Container>
 void MergeSort<Container>::FJalgo() {
+
+    if (m_sequence.size() == 1)
+        return;
 
     Container main_chain;
     Container pend_chain;
@@ -156,8 +157,11 @@ void MergeSort<Container>::FJalgo() {
 }
 
 template <typename Container>
-void MergeSort<Container>::printResult(std::vector<int> v)
+void MergeSort<Container>::printResult()
 {
+    if (m_result[0] == -1)
+        m_result = m_sequence;
+
 	std::cout << "Before: ";
 	for (int x : m_sequence) {
 		std::cout << x << " ";
@@ -165,7 +169,7 @@ void MergeSort<Container>::printResult(std::vector<int> v)
 	std::cout << "\n";
 
 	std::cout << "After: ";
-	for (int x : v) {
+	for (int x : m_result) {
 		std::cout << x << " ";
 	}
 	std::cout << "\n";
@@ -190,8 +194,7 @@ int MergeSort<Container>::parseInput(int ac, char **arg) {
 		else
 			return 1;
 	}
-    if (m_sequence.size() == 1)
-        printResult(m_sequence);
+
 	return 0;
 };
 
