@@ -68,7 +68,17 @@ void MergeSort<Container>::mergeSort(const Container& input, Container& main_cha
             std::swap(first, second);
         main_chain.push_back(first);
         pend_chain.push_back(second);
+
     }
+    Container new_main, new_pend;
+
+    mergeSort(main_chain, new_main, new_pend);
+    main_chain = new_main;
+
+    // 3. Combine results — new_main becomes sorted main chain
+
+    // Append pend_chain at the end or handle insertions later
+    pend_chain.insert(pend_chain.end(), new_pend.begin(), new_pend.end());
 }
 
 template <typename Container>
