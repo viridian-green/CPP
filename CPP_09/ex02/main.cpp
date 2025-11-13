@@ -17,7 +17,7 @@ int main(int ac, char **av)
 	}
 
 	vec.FJalgo();
-    deq.FJalgo();
+    // deq.FJalgo();
 	// vec.printResult(vec.getResult());
 
 

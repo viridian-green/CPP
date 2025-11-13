@@ -30,7 +30,7 @@ class MergeSort{
 	void sort();
 	void FJalgo();
 	void printResult(std::vector<int> v);
-    void mergeSort(const Container& input, Container& main_chain,  Container& pend_chain);
+    void mergeSort(Container& input, Container& main_chain,  Container& pend_chain);
     void binarySearch();
 	Container getResult();
     Container getInput();
@@ -73,37 +73,41 @@ Container MergeSort<Container>::jacobsthalOrder(size_t n) {
 };
 
 template <typename Container>
-void MergeSort<Container>::mergeSort(const Container& input, Container& main_chain,  Container& pend_chain)
+void MergeSort<Container>::mergeSort(Container& input, Container& main_chain,  Container& pend_chain)
 {
-    typedef typename Container::const_iterator const_it;
-    typedef typename Container::value_type value_type;
+        if (input.size() == 3)
+        {
+            pend_chain.push_back(input.back());
+            input.pop_back();
+        }
+        auto it = input.begin();
+        while (it != input.end()) {
 
-    if (input.size() <= 2) {
-        for (const_it it = input.begin(); it != input.end(); ++it)
-            main_chain.push_back(*it);
-        return;
-    }
-
-    const_it it = input.begin();
-    while (it != input.end()) {
-        value_type first = *it;
+        auto first = *it;
         ++it;
         if (it == input.end()) {
             pend_chain.push_back(first);
             break;
         }
-        value_type second = *it;
+
+        auto second = *it;
         ++it;
         if (first < second)
             std::swap(first, second);
         main_chain.push_back(first);
         pend_chain.push_back(second);
+        if (input.size() <= 2) {
+            main_chain.push_back(second);
+            main_chain.push_back(first);
+            return;
+        }
+
         // if (!form_pairs)
         // {
-            Pair p;
-            p.a = first;
-            p.b = second;
-            pairs.push_back(p);
+            // Pair p;
+            // p.a = first;
+            // p.b = second;
+            // pairs.push_back(p);
         // }
     }
     Container new_main, new_pend;
@@ -114,28 +118,6 @@ void MergeSort<Container>::mergeSort(const Container& input, Container& main_cha
     pend_chain.insert(pend_chain.end(), new_pend.begin(), new_pend.end());
 }
 
-
-template <typename Container, typename T>
-typename Container::const_iterator binarySearch(const Container& container, const T& value)
-{
-    auto left = container.begin();
-    auto right = container.end();
-
-    while (left < right) {
-        // find the middle iterator
-        auto mid = left;
-        std::advance(mid, std::distance(left, right) / 2);
-
-        if (*mid == value)
-            return mid; // found
-        else if (*mid < value)
-            left = std::next(mid); // search right half
-        else
-            right = mid;           // search left half
-    }
-
-    return container.end(); // not found
-}
 
 template <typename Container>
 void MergeSort<Container>::FJalgo() {
@@ -158,11 +140,11 @@ void MergeSort<Container>::FJalgo() {
         int val = pend_chain[idx];
         // std::cout << val << std::endl;
         // find its corresponding main partner
-        int partner = pairs[idx].a;
+        // int partner = pairs[idx].a;
         // std::cout << partner << std::endl;
         // binary search upper bound for where to insert val
-        auto pos = std::upper_bound(main_chain.begin(), main_chain.end(), partner);
-        main_chain.insert(pos, val);
+        // auto pos = std::upper_bound(main_chain.begin(), main_chain.end(), partner);
+        // main_chain.insert(pos, val);
     }
 
     std::cout << "After: ";
@@ -214,3 +196,24 @@ int MergeSort<Container>::parseInput(int ac, char **arg) {
 };
 
 
+template <typename Container, typename T>
+typename Container::const_iterator binarySearch(const Container& container, const T& value)
+{
+    auto left = container.begin();
+    auto right = container.end();
+
+    while (left < right) {
+        // find the middle iterator
+        auto mid = left;
+        std::advance(mid, std::distance(left, right) / 2);
+
+        if (*mid == value)
+            return mid; // found
+        else if (*mid < value)
+            left = std::next(mid); // search right half
+        else
+            right = mid;           // search left half
+    }
+
+    return container.end(); // not found
+}
