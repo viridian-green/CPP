@@ -18,7 +18,8 @@ template <typename Container>
 class MergeSort{
     Container m_sequence;
 	Container m_result;
-	std::vector<Pair> pairs;
+	std::vector<Pair> m_pair;
+    int form_pairs = -1;
 	// std::vector<int> main_chain; // bigger number from the pair
 	// std::vector<int> pend_chain;  // smaller number from the pair
 
@@ -37,7 +38,7 @@ class MergeSort{
     void binarySearch();
 	Container getResult();
     Container getInput();
-	// void JacobstahlInsert();
+	std::vector<size_t> jacobsthalOrder(size_t n);
 
 };
 
@@ -48,7 +49,6 @@ void MergeSort<Container>::mergeSort(const Container& input, Container& main_cha
     typedef typename Container::value_type value_type;
 
     if (input.size() <= 2) {
-        // for very small inputs just copy into main_chain
         for (const_it it = input.begin(); it != input.end(); ++it)
             main_chain.push_back(*it);
         return;
@@ -68,17 +68,41 @@ void MergeSort<Container>::mergeSort(const Container& input, Container& main_cha
             std::swap(first, second);
         main_chain.push_back(first);
         pend_chain.push_back(second);
-
+        if (!form_pairs)
+        {
+        m_pair.push_back(std::make_pair(first, second));
+        form_pairs = 1;
+        }
     }
     Container new_main, new_pend;
 
     mergeSort(main_chain, new_main, new_pend);
     main_chain = new_main;
 
-    // 3. Combine results — new_main becomes sorted main chain
-
-    // Append pend_chain at the end or handle insertions later
     pend_chain.insert(pend_chain.end(), new_pend.begin(), new_pend.end());
+}
+
+
+template <typename Container, typename T>
+typename Container::const_iterator binarySearch(const Container& container, const T& value)
+{
+    auto left = container.begin();
+    auto right = container.end();
+
+    while (left < right) {
+        // find the middle iterator
+        auto mid = left;
+        std::advance(mid, std::distance(left, right) / 2);
+
+        if (*mid == value)
+            return mid; // found
+        else if (*mid < value)
+            left = std::next(mid); // search right half
+        else
+            right = mid;           // search left half
+    }
+
+    return container.end(); // not found
 }
 
 template <typename Container>
@@ -95,6 +119,9 @@ Container MergeSort<Container>::FJalgo() {
          for (typename Container::value_type x : pend_chain) {
         std::cout << x << "< ";
     } std::cout << "\n";
+
+    Container order = jacobsthalOrder(pend_chain.size());
+
 
     return (main_chain);
 }

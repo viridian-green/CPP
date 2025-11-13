@@ -21,37 +21,27 @@ Container MergeSort<Container>::getResult()
 	return m_result;
 }
 
-template <typename Container>
-Container MergeSort<Container>::getInput()
-{
-	return m_sequence;
-}
-
 void insertInSortedOrder(std::vector<int>& vec, int value) {
     auto pos = std::lower_bound(vec.begin(), vec.end(), value);
     vec.insert(pos, value);
 }
 
-// Compute a simple Jacobsthal-like order for n elements
-std::vector<int> jacobsthalOrder(int n) {
-    std::vector<int> order;
+std::vector<size_t> MergeSort::jacobsthalOrder(size_t n) {
+    std::vector<size_t> order;
     if (n == 0) return order;
-    int a = 1, b = 1;
-    while (a < n) {
-        order.push_back(a - 1);
-        int tmp = a;
-        a = b + 2 * a;
-        b = tmp;
-    }
-    for (int i = 0; i < n; ++i)
-        if (std::find(order.begin(), order.end(), i) == order.end())
+    std::vector<size_t> jacob = {0, 1};
+    while (jacob.back() < n - 1)
+        jacob.push_back(jacob.back() + 2 * jacob[jacob.size() - 2]);
+
+    // The FJ algorithm uses Jacobsthal gaps to define insertion indices
+    size_t last = 1;
+    while (last < n) {
+        size_t next = std::min(jacob[last], n - 1);
+        for (size_t i = next; i > jacob[last - 1]; --i)
             order.push_back(i);
+        ++last;
+    }
     return order;
-};
-
-void binarySearch()
-{
-
 }
 
 
