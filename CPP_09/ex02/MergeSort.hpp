@@ -12,34 +12,64 @@
 struct Pair {
     int a; //bigger number: on the left of pair
     int b; //smaller number: on the right of pair
-}; //DO WE STILL NEED THIS?
+    // Pair(int x, int y) : a(x), b(y) {}
+};
 
 template <typename Container>
 class MergeSort{
-    Container m_sequence;
-	Container m_result;
-	std::vector<Pair> m_pair;
-    int form_pairs = -1;
-	// std::vector<int> main_chain; // bigger number from the pair
-	// std::vector<int> pend_chain;  // smaller number from the pair
 
 	public:
 	// MergeSort();
 	// MergeSort(const MergeSort &oth);
 	// MergeSort &operator=(const MergeSort &oth);
 	// ~MergeSort();
+     typedef typename Container::value_type value_type;
 	void initContainers(const std::set<int>& input);
 	int parseInput(int ac, char **arg);
 	void VecJohnsonFord();
 	void sort();
-	Container FJalgo();
+	void FJalgo();
 	void printResult(std::vector<int> v);
     void mergeSort(const Container& input, Container& main_chain,  Container& pend_chain);
     void binarySearch();
 	Container getResult();
     Container getInput();
-	std::vector<size_t> jacobsthalOrder(size_t n);
+	Container jacobsthalOrder(size_t n);
 
+    private:
+    Container m_sequence;
+	Container m_result;
+	// Container::<std::Pair<int, int>> pairs;
+     std::vector<Pair> pairs;
+    int form_pairs = -1;
+	// std::vector<int> main_chain; // bigger number from the pair
+	// std::vector<int> pend_chain;  // smaller number from the pair
+
+};
+
+template <typename Container>
+Container MergeSort<Container>::jacobsthalOrder(size_t n) {
+    Container order;
+    if (n == 0)
+        return order;
+    Container jacob;
+    jacob.push_back(0);
+    jacob.push_back(1);
+    while (jacob.back() < n - 1)
+        jacob.push_back(jacob.back() + 2 * jacob[jacob.size() - 2]);
+
+    // The FJ algorithm uses Jacobsthal gaps to define insertion indices
+    size_t last = 1;
+    while (last < n) {
+        size_t next = jacob[last];
+        if (next > n - 1)
+            next = n - 1;
+        for (size_t i = next; i > jacob[last - 1]; --i)
+            order.push_back(i);
+        ++last;
+    }
+
+    return order;
 };
 
 template <typename Container>
@@ -68,14 +98,16 @@ void MergeSort<Container>::mergeSort(const Container& input, Container& main_cha
             std::swap(first, second);
         main_chain.push_back(first);
         pend_chain.push_back(second);
-        if (!form_pairs)
-        {
-        m_pair.push_back(std::make_pair(first, second));
-        form_pairs = 1;
-        }
+        // if (!form_pairs)
+        // {
+            Pair p;
+            p.a = first;
+            p.b = second;
+            pairs.push_back(p);
+        // }
     }
     Container new_main, new_pend;
-
+    form_pairs = 1;
     mergeSort(main_chain, new_main, new_pend);
     main_chain = new_main;
 
@@ -106,13 +138,15 @@ typename Container::const_iterator binarySearch(const Container& container, cons
 }
 
 template <typename Container>
-Container MergeSort<Container>::FJalgo() {
+void MergeSort<Container>::FJalgo() {
 
     Container main_chain;
     Container pend_chain;
     mergeSort(m_sequence, main_chain, pend_chain);
 
-     for (typename Container::value_type x : main_chain) {
+
+    Container order = jacobsthalOrder(pend_chain.size());
+      for (typename Container::value_type x : main_chain) {
         std::cout << x << ". ";
     } std::cout << "\n";
 
@@ -120,10 +154,23 @@ Container MergeSort<Container>::FJalgo() {
         std::cout << x << "< ";
     } std::cout << "\n";
 
-    Container order = jacobsthalOrder(pend_chain.size());
+    for (size_t idx : order) {
+        int val = pend_chain[idx];
+        // std::cout << val << std::endl;
+        // find its corresponding main partner
+        int partner = pairs[idx].a;
+        // std::cout << partner << std::endl;
+        // binary search upper bound for where to insert val
+        auto pos = std::upper_bound(main_chain.begin(), main_chain.end(), partner);
+        main_chain.insert(pos, val);
+    }
 
+    std::cout << "After: ";
+	for (int x : main_chain) {
+		std::cout << x << " ";
+	}
 
-    return (main_chain);
+    m_result = main_chain;
 }
 
 template <typename Container>
