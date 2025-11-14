@@ -41,6 +41,7 @@ class MergeSort{
     std::vector<Pair> make_pairs(const std::vector<int>& nums);
     std::vector<int> find_pend(const std::vector<Pair>& pairs);
     std::vector<int> find_main(const std::vector<Pair>& pairs);
+    std::vector<int> jacobsthalOrder(size_t n);
     // std::vector<int> MergeSort::FJAlgo(const std::vector<int>& input);
 
     private:
@@ -54,30 +55,6 @@ class MergeSort{
 
 
 
-// template <template <typename> class Container>
-// int_container MergeSort<Container>::jacobsthalOrder(size_t n) {
-//     int_container order;
-//     if (n == 0)
-//         return order;
-//     int_container jacob;
-//     jacob.push_back(0);
-//     jacob.push_back(1);
-//     while (jacob.back() < n - 1)
-//         jacob.push_back(jacob.back() + 2 * jacob[jacob.size() - 2]);
-
-//     // The FJ algorithm uses Jacobsthal gaps to define insertion indices
-//     size_t last = 1;
-//     while (last < n) {
-//         size_t next = jacob[last];
-//         if (next > n - 1)
-//             next = n - 1;
-//         for (size_t i = next; i > jacob[last - 1]; --i)
-//             order.push_back(i);
-//         ++last;
-//     }
-
-//     return order;
-// };
 
 // template <template <typename> class Container>
 // typename MergeSort<Container>::pair_container

@@ -40,8 +40,17 @@ std::vector<int> MergeSort::find_main(const std::vector<Pair>& pairs)
 
     return main_chain;
 }
+std::vector<int> flatten_pairs(const std::vector<Pair>& pairs) {
+    std::vector<int> result;
+    result.reserve(pairs.size() * 2);  // preallocate for efficiency
 
+    for (const auto& p : pairs) {
+        result.push_back(p.a);
+        result.push_back(p.b);
+    }
 
+    return result;
+}
 std::vector<Pair> MergeSort::FJAlgo(const std::vector<Pair>& pairs)
 {
     // base case
@@ -62,55 +71,35 @@ if (main_chain.size() % 2 == 1) {
 std::vector<Pair> main_pairs = make_pairs(main_chain);
 
 std::vector<Pair> sorted_main = FJAlgo(main_pairs);
+std::vector<int> lower_sorted = flatten_pairs(FJAlgo(main_pairs)); // Or another method to flatten recursively
+std::vector<int> main_sorted;
+main_sorted.insert(main_sorted.end(), lower_sorted.begin(), lower_sorted.end());
 
-// convert sorted_main back to a sorted list of values
-std::vector<int> main_sorted = flatten_pairs(sorted_main);
-
-// Now reinsert the straggler
-if (straggler != -1)
-    insert_into_chain(main_sorted, straggler);
-
-    std::vector<int> result;
-
-// Step 1: push the b of the first pair
-if (!sorted_main.empty())
-    result.push_back(sorted_main[0].b);
-
-// Step 2: push b and a for every pair
+// Now add current level (b values)
 for (const Pair &p : sorted_main) {
-    // b is already pushed for the first pair
-    if (&p != &sorted_main[0])
-        result.push_back(p.b);
-
-    result.push_back(p.a);
+    main_sorted.push_back(p.b);
 }
 
-if (straggler != -1)
-    result.push_back(straggler);
+// Insert straggler if needed
+if (straggler != -1) {
+    auto pos = std::lower_bound(main_sorted.begin(), main_sorted.end(), straggler);
+    main_sorted.insert(pos, straggler);
+}
 
+// // Insert straggler
+// if (straggler != -1) {
+//     auto pos = std::lower_bound(main_sorted.begin(), main_sorted.end(), straggler);
+//     main_sorted.insert(pos, straggler);
+// }
 
-   std::cout << "Result: ";
-	for (int x : result) {
+       std::cout << "Sorted chain: ";
+	for (int x : main_sorted) {
 		std::cout << x << ".";
 	}
 	std::cout << "\n";
-
-
-    std::cout << "Pend chain: ";
-	for (int x : pend_chain) {
-		std::cout << x << ".";
-	}
-	std::cout << "\n";
-
-        std::cout << "Main chain: ";
-	for (int x : main_chain) {
-		std::cout << x << ".";
-	}
-	std::cout << "\n";
-
 
         std::cout << "Sorted chain: ";
-	for (Pair x : sorted_main) {
+	for (int x : main_sorted) {
 		std::cout << x << ".";
 	}
 	std::cout << "\n";
@@ -145,6 +134,30 @@ std::vector<int> MergeSort::getInput()
 {
 	return m_sequence;
 }
+
+std::vector<int> MergeSort::jacobsthalOrder(size_t n) {
+    std::vector<int> order;
+    if (n == 0)
+        return order;
+    std::vector<int> jacob;
+    jacob.push_back(0);
+    jacob.push_back(1);
+    while (jacob.back() < n - 1)
+        jacob.push_back(jacob.back() + 2 * jacob[jacob.size() - 2]);
+
+    // The FJ algorithm uses Jacobsthal gaps to define insertion indices
+    size_t last = 1;
+    while (last < n) {
+        size_t next = jacob[last];
+        if (next > n - 1)
+            next = n - 1;
+        for (size_t i = next; i > jacob[last - 1]; --i)
+            order.push_back(i);
+        ++last;
+    }
+
+    return order;
+};
 
 int MergeSort::parseInput(int ac, char **arg) {
 
