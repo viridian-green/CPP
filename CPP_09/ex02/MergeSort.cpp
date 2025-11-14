@@ -165,7 +165,7 @@ std::vector<int> MergeSort::find_main(const std::vector<Pair>& pairs)
 std::vector<int> MergeSort::FJAlgo(const std::vector<int>& input)
 {
     // Base case
-    if (input.size() <= 2)
+    if (input.size() <= 1)
         return input;
 
     // Step 1: make pairs
