@@ -3,8 +3,7 @@
 
 int main(int ac, char **av)
 {
-    MergeSort<std::vector<int>> vec;
-    MergeSort<std::deque<int>> deq;
+    MergeSort vec;
 	if (ac <= 1)
 	{
 		std::cerr << "Error. You must input name of program and your sequence" << std::endl;
@@ -15,8 +14,9 @@ int main(int ac, char **av)
 		std::cerr << "Error. You must input a positive integer sequence" << std::endl;
 		return 1;
 	}
-    pairs = vec.make_pairs(vec.getInput());
-	// vec.FJalgo();
+    std::vector<Pair> pairs = vec.make_pairs(vec.getInput());
+
+    vec.FJAlgo(pairs);
     // deq.FJalgo();
 	// vec.printResult();
 
