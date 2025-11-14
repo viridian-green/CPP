@@ -25,7 +25,7 @@ std::vector<int> MergeSort::find_pend(const std::vector<Pair>& pairs)
     pend_chain.reserve(pairs.size());
 
     for (const auto& p : pairs)
-        pend_chain.push_back(p.b);
+        pend_chain.push_back(p.a);
 
     return pend_chain;
 }
@@ -36,7 +36,7 @@ std::vector<int> MergeSort::find_main(const std::vector<Pair>& pairs)
     main_chain.reserve(pairs.size());
 
     for (const auto& p : pairs)
-        main_chain.push_back(p.a);
+        main_chain.push_back(p.b);
 
     return main_chain;
 }
@@ -47,7 +47,7 @@ std::vector<int> MergeSort::find_main(const std::vector<Pair>& pairs)
 std::vector<int> MergeSort::FJAlgo(const std::vector<int>& input)
 {
     // base case
-    if (input.size() <= 2)
+    if (input.size() <= 1)
         return input;
 
     std::vector<Pair> pairs = make_pairs(input);
@@ -56,8 +56,6 @@ std::vector<int> MergeSort::FJAlgo(const std::vector<int>& input)
     std::vector<int> main_chain = find_main(pairs);
     std::vector<int> pend_chain = find_pend(pairs);
 
-    // recursively pair and sort the pend chain
-    std::vector<int> sorted_main = FJAlgo(main_chain);
 
     std::cout << "Pend: ";
 	for (int x : pend_chain) {
@@ -70,6 +68,10 @@ std::vector<int> MergeSort::FJAlgo(const std::vector<int>& input)
 		std::cout << x << ".";
 	}
 	std::cout << "\n";
+
+
+    // recursively pair and sort the pend chain
+    std::vector<int> sorted_main = FJAlgo(main_chain);
 
     std::cout << "Sorted_main: ";
 	for (int x : sorted_main) {
