@@ -3,7 +3,7 @@
 
 int main(int ac, char **av)
 {
-	MergeSort<std::vector<int>> vec;
+    MergeSort<std::vector<int>> vec;
     MergeSort<std::deque<int>> deq;
 	if (ac <= 1)
 	{
@@ -15,10 +15,10 @@ int main(int ac, char **av)
 		std::cerr << "Error. You must input a positive integer sequence" << std::endl;
 		return 1;
 	}
-
-	vec.FJalgo();
+    pairs = vec.make_pairs(vec.getInput());
+	// vec.FJalgo();
     // deq.FJalgo();
-	vec.printResult();
+	// vec.printResult();
 
 
 //TODO: Debug for the number of operations

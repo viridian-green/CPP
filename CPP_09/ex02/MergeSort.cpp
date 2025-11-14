@@ -20,6 +20,12 @@ Container MergeSort<Container>::getResult()
 	return m_result;
 }
 
+template <typename Container>
+Container MergeSort<Container>::getInput()
+{
+	return m_result;
+}
+
 void insertInSortedOrder(std::vector<int>& vec, int value) {
     auto pos = std::lower_bound(vec.begin(), vec.end(), value);
     vec.insert(pos, value);
