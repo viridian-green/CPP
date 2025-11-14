@@ -14,9 +14,9 @@ int main(int ac, char **av)
 		std::cerr << "Error. You must input a positive integer sequence" << std::endl;
 		return 1;
 	}
-    // std::vector<Pair> pairs = vec.make_pairs(vec.getInput());
+    std::vector<Pair> pairs = vec.make_pairs(vec.getInput());
 
-    vec.FJAlgo(vec.getInput());
+    vec.FJAlgo(pairs);
     // deq.FJalgo();
 	// vec.printResult();
 
