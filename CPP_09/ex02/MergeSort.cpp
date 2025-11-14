@@ -42,10 +42,12 @@ std::vector<int> MergeSort::find_main(const std::vector<Pair>& pairs)
 }
 
 
+
+
 std::vector<int> MergeSort::FJAlgo(const std::vector<int>& input)
 {
     // base case
-    if (input.size() <= 1)
+    if (input.size() <= 2)
         return input;
 
     std::vector<Pair> pairs = make_pairs(input);
@@ -141,7 +143,7 @@ std::vector<Pair> MergeSort::make_pairs(const std::vector<int>& nums)
         }
 
         int y = *it++;
-        if (x < y) std::swap(x, y);
+        if (x > y) std::swap(x, y);
 
         pairs.push_back({x, y});
     }
