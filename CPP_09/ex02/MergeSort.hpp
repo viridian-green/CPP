@@ -10,10 +10,12 @@
 
 //I keep the original pair and will never break that relationship
 struct Pair {
-    int a; //bigger number: on the left of pair
-    int b; //smaller number: on the right of pair
-    // Pair(int x, int y) : a(x), b(y) {}
+    int a;
+    int b;
+    int pend_idx;
+    int main_idx;
 };
+
 
 class MergeSort{
 
@@ -40,6 +42,7 @@ class MergeSort{
     std::vector<Pair> make_pairs(const std::vector<int>& nums);
     std::vector<int> find_pend(const std::vector<Pair>& pairs);
     std::vector<int> find_main(const std::vector<Pair>& pairs);
+     std::vector<int> jacobsthalOrder(size_t n) ;
     std::vector<int> FJAlgo(const std::vector<int>& input);
 
     private:
