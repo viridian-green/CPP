@@ -27,7 +27,6 @@ class MergeSort{
     // using pair_container = Container<Pair>;
 	// void initContainers(const std::set<int>& input);
 	int parseInput(int ac, char **arg);
-    std::vector<Pair> FJAlgo(const std::vector<Pair>& pairs);
 	// void VecJohnsonFord();
 	// void sort();
 	// void FJalgo();
@@ -41,6 +40,7 @@ class MergeSort{
     std::vector<Pair> make_pairs(const std::vector<int>& nums);
     std::vector<int> find_pend(const std::vector<Pair>& pairs);
     std::vector<int> find_main(const std::vector<Pair>& pairs);
+    std::vector<int> FJAlgo(const std::vector<int>& input);
 
     private:
     std::vector<int> m_sequence;
