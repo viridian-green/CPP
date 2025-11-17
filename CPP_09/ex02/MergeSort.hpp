@@ -12,10 +12,13 @@
 struct Pair {
     int a;
     int b;
-    int pend_idx;
-    int main_idx;
 };
 
+struct PairWithIndex {
+    int bigger;
+    int smaller;
+    size_t originalIndex;
+};
 
 class MergeSort{
 
