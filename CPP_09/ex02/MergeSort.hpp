@@ -15,8 +15,8 @@ struct Pair {
 };
 
 struct PairWithIndex {
-    int bigger;
-    int smaller;
+    int main;
+    int pend;
     size_t originalIndex;
 };
 

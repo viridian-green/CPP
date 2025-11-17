@@ -10,7 +10,7 @@
 #include <algorithm>
 //For debug purposes
 std::ostream& operator<<(std::ostream& os, const PairWithIndex& p) {
-    os << "(" << p.bigger << ", " << p.smaller << ")";
+    os << "(" << p.main << ", " << p.pend << ")";
     return os;
 }
 
@@ -119,60 +119,55 @@ std::vector<size_t> getJacobsthalOrder(size_t n) {
     }
 
     std::vector<PairWithIndex> pairs;
-    int straggler = -1;
-    bool hasStraggler = false;
+    int leftover = -1;
+    bool has_leftover = false;
 
+    //
+    std::vector<int> main_chain;
 
-    // Create pairs and keep track of pairings
+//Keep track of original pairing when building the pairs
     for (size_t i = 0; i + 1 < input.size(); i += 2) {
         PairWithIndex p;
-        int j = input[ i + 1];
         if (input[i] < input[i + 1]) {
             std::swap(input[i], input[i + 1]);
         }
-        p.bigger = input[i];
-        p.smaller = input[i + 1];
+        p.main = input[i];
+        p.pend = input[i + 1];
+        main_chain.push_back(input[i]);
         p.originalIndex = pairs.size();
         pairs.push_back(p);
     }
 
     // Handle odd number of elements (straggler)
     if (input.size() % 2 == 1) {
-        straggler = input[input.size() - 1];
-        hasStraggler = true;
+        leftover = input.back();
+        has_leftover = true;
     }
 
-    // Extract biggest elements for recursion
-    std::vector<int> biggest;
-    for (size_t i = 0; i < pairs.size(); i++) {
-        biggest.push_back(pairs[i].bigger);
-    }
-
-    // Recursively sort the biggest vector
-    biggest = FJAlgo(biggest);
-
+    // Recursively sort the main chain
+    main_chain = FJAlgo(main_chain);
 
     std::vector<PairWithIndex> sortedPairs;
-    for (size_t i = 0; i < biggest.size(); i++) {
+    for (size_t i = 0; i < main_chain.size(); i++) {
         for (size_t j = 0; j < pairs.size(); j++) {
-            if (pairs[j].bigger == biggest[i]) {
+            if (pairs[j].main == main_chain[i]) {
                 sortedPairs.push_back(pairs[j]);
-                pairs[j].bigger = -1; // Mark as used
+                pairs[j].main = -1; // Mark as used
                 break;
             }
         }
     }
 
     // Start with sorted biggest vector
-    std::vector<int> result = biggest;
+    std::vector<int> result = main_chain;
 
     std::cout << "biggest: ";
-	for (int x : biggest) {
+	for (int x : main_chain) {
 		std::cout << x  << ".";
 	}
     // Insert first smaller element at the beginning
     if (!sortedPairs.empty()) {
-        result.insert(result.begin(), sortedPairs[0].smaller);
+        result.insert(result.begin(), sortedPairs[0].pend);
     }
 
     // Get Jacobstahl insertion order for remianing smaller elements
@@ -185,8 +180,8 @@ std::vector<size_t> getJacobsthalOrder(size_t n) {
         if (idx >= sortedPairs.size()) continue;
 
 
-        int toInsert = sortedPairs[idx].smaller;
-        int pairBigger = sortedPairs[idx].bigger;
+        int toInsert = sortedPairs[idx].pend;
+        int pairBigger = sortedPairs[idx].main;
 
         // Find position of the paired bigger element
         std::vector<int>::iterator pairPos = std::find(result.begin(), result.end(), pairBigger);
@@ -197,15 +192,13 @@ std::vector<size_t> getJacobsthalOrder(size_t n) {
     }
 
     // Insert straggler if exists
-    if (hasStraggler) {
+    if (has_leftover) {
         size_t pos = 0;
-        while (pos < result.size() && result[pos] < straggler) {
+        while (pos < result.size() && result[pos] < leftover) {
             pos++;
         }
-        result.insert(result.begin() + pos, straggler);
+        result.insert(result.begin() + pos, leftover);
     }
-
-
 
     std::cout << "result: ";
 	for (int x : result) {
