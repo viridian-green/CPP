@@ -27,19 +27,8 @@ class MergeSort{
 	// MergeSort(const MergeSort &oth);
 	// MergeSort &operator=(const MergeSort &oth);
 	// ~MergeSort();
-    // using value_type = typename Container::value_type;
-    // using int_container  = Container<int>;
-    // using pair_container = Container<Pair>;
-	// void initContainers(const std::set<int>& input);
+
 	int parseInput(int ac, char **arg);
-	// void VecJohnsonFord();
-	// void sort();
-	// void FJalgo();
-    // Container make_pairs(const std::vector<int>& input);
-	// void printResult();
-    // void mergeSort(Container& input, Container& main_chain,  Container& pend_chain);
-    // void binarySearch();
-	// Container getResult();
     std::vector<int> getInput();
 	// int_container jacobsthalOrder(size_t n);
     std::vector<Pair> make_pairs(std::vector<int> nums);
@@ -51,9 +40,6 @@ class MergeSort{
     private:
     std::vector<int> m_sequence;
 	std::vector<int> m_result;
-    std::vector<Pair> pairs;
-    int m_leftover;
-    int form_pairs = -1;
 
 };
 
