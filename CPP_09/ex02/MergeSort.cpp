@@ -7,11 +7,15 @@
 
 // MergeSort::~MergeSort(){}
 
-#include <algorithm>
 //For debug purposes
 std::ostream& operator<<(std::ostream& os, const PairWithIndex& p) {
     os << "(" << p.main << ", " << p.pend << ")";
     return os;
+}
+
+int MergeSort::getNbrComparaisons()
+{
+    return m_comparaisons;
 }
 
 // Container MergeSort::getResult()
@@ -19,36 +23,38 @@ std::ostream& operator<<(std::ostream& os, const PairWithIndex& p) {
 // 	return m_result;
 // }
 
-std::vector<int> MergeSort::find_pend(std::vector<Pair> pairs)
-{
-    std::vector<int> pend_chain;
-    pend_chain.reserve(pairs.size());
+size_t MergeSort::maxFJComparisons(size_t n) {
+    if (n <= 1) return 0;  // base case
 
-    for (const auto& p : pairs)
-        pend_chain.push_back(p.b);
+    // Step 1: comparisons for pairing
+    size_t pairComparisons = n / 2;
 
-    return pend_chain;
+    // Step 2: recursively sort the main chain (ceil(n/2) elements)
+    size_t mainChainSize = (n + 1) / 2;
+    size_t recursiveComparisons = maxFJComparisons(mainChainSize);
+
+    // Step 3: insert the pend (smaller) elements using binary search
+    size_t pendSize = n / 2;
+    size_t insertComparisons = 0;
+    for (size_t k = 1; k <= pendSize; ++k) {
+        insertComparisons += (size_t)std::ceil(std::log2(k + 1)); 
+        // +1 ensures log2(1)=0 is counted properly
+    }
+
+    return (pairComparisons + recursiveComparisons + insertComparisons);
 }
 
-std::vector<int> MergeSort::find_main(std::vector<Pair> pairs)
-{
-    std::vector<int> main_chain;
-    main_chain.reserve(pairs.size());
-
-    for (const auto& p : pairs)
-        main_chain.push_back(p.a);
-
-    return main_chain;
-}
 std::vector<size_t> generateJacobstahl(size_t n) {
     std::vector<size_t> jacobstahl;
     jacobstahl.push_back(0);
-    if (n > 0) jacobstahl.push_back(1);
+    if (n > 0) 
+        jacobstahl.push_back(1);
 
     size_t idx = 1;
     while (true) {
         size_t next = jacobstahl[idx] + 2 * jacobstahl[idx - 1];
-        if (next >= n) break;
+        if (next >= n) 
+            break;
         jacobstahl.push_back(next);
         idx++;
     }
@@ -56,7 +62,7 @@ std::vector<size_t> generateJacobstahl(size_t n) {
     return jacobstahl;
 }
 
-std::vector<size_t> getJacobsthalOrder(size_t n) {
+std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
     if (n == 0) return std::vector<size_t>();
 
     std::vector<size_t> jacobstahl = generateJacobstahl(n);
@@ -103,6 +109,7 @@ std::vector<size_t> getJacobsthalOrder(size_t n) {
     for (size_t i = 0; i + 1 < input.size(); i += 2) {
         PairWithIndex p;
         if (input[i] < input[i + 1]) {
+            m_comparaisons++;
             std::swap(input[i], input[i + 1]);
         }
         p.main = input[i];
@@ -125,6 +132,7 @@ std::vector<size_t> getJacobsthalOrder(size_t n) {
     for (size_t i = 0; i < main_chain.size(); i++) {
         for (size_t j = 0; j < pairs.size(); j++) {
             if (pairs[j].main == main_chain[i]) {
+                m_comparaisons++;
                 sortedPairs.push_back(pairs[j]);
                 pairs[j].main = -1; // Mark as used
                 break;
@@ -150,25 +158,42 @@ std::vector<size_t> getJacobsthalOrder(size_t n) {
     // Insert remaining smaller elements in Jacobstahl order
     for (size_t i = 0; i < order.size(); i++) {
         size_t idx = order[i];
-        if (idx == 0) continue; // Already inserted
+        if (idx == 0) 
+            continue;
         if (idx >= sortedPairs.size()) continue;
 
 
         int toInsert = sortedPairs[idx].pend;
         int pairBigger = sortedPairs[idx].main;
 
-        // Find position of the paired bigger element
-        std::vector<int>::iterator pairPos = std::find(result.begin(), result.end(), pairBigger);
+        size_t maxPos = 0;
+        for (size_t j = 0; j < result.size(); j++) {
+            if (result[j] == pairBigger) {
+                maxPos = j;
+                break;
+            }
+        }
 
-        // Binary search up to the paired element's position using lower_bound
-        std::vector<int>::iterator insertPos = std::lower_bound(result.begin(), pairPos + 1, toInsert);
-        result.insert(insertPos, toInsert);
+        // Binary search up to the paired element's position
+        size_t left = 0;
+        size_t right = maxPos + 1;
+        while (left < right) {
+            size_t mid = left + (right - left) / 2;
+            if (result[mid] < toInsert) {
+                m_comparaisons++;
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+        result.insert(result.begin() + left, toInsert);
     }
 
     // Insert straggler if exists
     if (has_leftover) {
         size_t pos = 0;
         while (pos < result.size() && result[pos] < leftover) {
+            m_comparaisons++;
             pos++;
         }
         result.insert(result.begin() + pos, leftover);
@@ -209,31 +234,6 @@ int MergeSort::parseInput(int ac, char **arg) {
 };
 
 MergeSort::MergeSort() {}
-
-std::vector<Pair> MergeSort::make_pairs(std::vector<int> nums)
-{
-    std::vector<Pair> pairs;
-    auto it = nums.begin();
-
-    if (nums.size() % 2 == 1) {
-    m_leftover = nums.back();  // Get the last element's value
-}
-
-    while (it != nums.end()) {
-        int x = *it++;
-
-        if (it == nums.end()) {
-            break;
-        }
-
-        int y = *it++;
-        if (x > y) std::swap(x, y);
-
-        pairs.push_back({x, y});
-    }
-
-    return pairs;
-}
 
 void insertInSortedOrder(std::vector<int>& vec, int value) {
     auto pos = std::lower_bound(vec.begin(), vec.end(), value);

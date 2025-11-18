@@ -30,16 +30,21 @@ class MergeSort{
 
 	int parseInput(int ac, char **arg);
     std::vector<int> getInput();
+    int getNbrComparaisons();
+    size_t maxFJComparisons(size_t n);
 	// int_container jacobsthalOrder(size_t n);
     std::vector<Pair> make_pairs(std::vector<int> nums);
     std::vector<int> find_pend(std::vector<Pair> pairs);
     std::vector<int> find_main(std::vector<Pair> pairs);
      std::vector<int> jacobsthalOrder(size_t n) ;
     std::vector<int> FJAlgo(std::vector<int> input);
+    std::vector<size_t> getJacobsthalOrder(size_t n);
 
     private:
     std::vector<int> m_sequence;
 	std::vector<int> m_result;
+    int m_comparaisons = 0;
+    int m_leftover = 0;
 
 };
 

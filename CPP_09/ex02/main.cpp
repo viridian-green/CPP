@@ -17,8 +17,10 @@ int main(int ac, char **av)
     // std::vector<Pair> pairs = vec.make_pairs(vec.getInput());
 
     vec.FJAlgo(vec.getInput());
+	std::cout << "Comparaisons used :" << vec.getNbrComparaisons() << std::endl;
     // deq.FJalgo();
 	// vec.printResult();
+	std::cout << vec.maxFJComparisons(15) - 1 << std::endl;
 
 
 //TODO: Debug for the number of operations
