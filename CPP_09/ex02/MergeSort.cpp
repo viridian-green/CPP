@@ -13,8 +13,6 @@ std::ostream& operator<<(std::ostream& os, const PairWithIndex& p) {
     return os;
 }
 
-
-
 // std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n){
 // 	std::vector<size_t> jacobsthal;
 // 	size_t j0 = 0, j1 = 1;
@@ -203,46 +201,45 @@ void MergeSort::vec_duration()
 //     return order;
 // }
 
-int jacobsthal(int n)
-{
-    if (n == 0)
-        return 0;
-    if (n == 1)
-        return 1;
-    return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
-}
+// int jacobsthal(int n)
+// {
+//     if (n == 0)
+//         return 0;
+//     if (n == 1)
+//         return 1;
+//     return jacobsthal(n - 1) + 2 * jacobsthal(n - 2);
+// }
 
-std::vector<size_t> generateJacobstahl(size_t n)
-{
-    std::vector<size_t> sequence;
-    int i = 1;
-    int lastValue = -1;
-    while (sequence.size() < n) {
-        int jn = jacobsthal(i);
-        if (jn > (int)n) {
-            break;
-        }
-        if (jn != 0 && jn != lastValue) {
-            sequence.push_back(jn);
-            lastValue = jn;
-        }
-        i++;
-    }
-    //Fill in remaining indices after last Jacobstahl number
-    if (!sequence.empty() && sequence.back() < (int)n) {
-        for (int j = sequence.back() + 1; j <= (int)n; j++) {
-            sequence.push_back(j);
-        }
-    }
-    return sequence;
-}
+// std::vector<size_t> generateJacobstahl(size_t n)
+// {
+//     std::vector<size_t> sequence;
+//     int i = 0;
+//     int lastValue = -1;
+//     while (sequence.size() < n) {
+//         int jn = jacobsthal(i);
+//         if (jn > (int)n) {
+//             break;
+//         }
+//         if (jn != 0 && jn != lastValue) {
+//             sequence.push_back(jn);
+//             lastValue = jn;
+//         }
+//         i++;
+//     }
+//     //Fill in remaining indices after last Jacobstahl number
+//     if (!sequence.empty() && sequence.back() < (int)n) {
+//         for (int j = sequence.back() + 1; j <= (int)n; j++) {
+//             sequence.push_back(j);
+//         }
+//     }
+//     return sequence;
+// }
 
 std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
     if (n == 0) 
         return std::vector<size_t>();
 
-    std::vector<size_t> jacobstahl = {0, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525, 699051, 1398101, 2796203, 5592405, 11184811, 22369621, 44739243, 89478485, 178956971, 357913941, 715827883, 1431655765};
-    // std::vector<size_t> jacobstahl = generateJacobstahl(n);
+    std::vector<size_t> jacobstahl = {0, 1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525, 699051, 1398101, 2796203, 5592405, 11184811, 22369621, 44739243, 89478485, 178956971, 357913941, 715827883, 1431655765};
     std::vector<size_t> order;
     std::vector<bool> used(n, false);
 
@@ -258,6 +255,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
             }
         }
     }
+
 
     // Add any remaining elements
     for (size_t i = 0; i < n; i++) {

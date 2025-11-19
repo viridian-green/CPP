@@ -25,7 +25,7 @@ int main(int ac, char **av)
 	}
 
     // deq.FJalgo();
-	vec.printResult();
+	// vec.printResult();
 
 	// MergeSort deq;
 
