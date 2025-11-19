@@ -23,26 +23,27 @@ int MergeSort::getNbrComparaisons()
 // 	return m_result;
 // }
 
-size_t MergeSort::maxFJComparisons(size_t n) {
-    if (n <= 1) return 0;  // base case
+void MergeSort::printResult()
+{
+    if (m_result[0] == -1)
+        m_result = m_sequence;
 
-    // Step 1: comparisons for pairing
-    size_t pairComparisons = n / 2;
+	std::cout << "Before: ";
+	for (int x : m_sequence) {
+		std::cout << x << " ";
+	}
+	std::cout << "\n";
 
-    // Step 2: recursively sort the main chain (ceil(n/2) elements)
-    size_t mainChainSize = (n + 1) / 2;
-    size_t recursiveComparisons = maxFJComparisons(mainChainSize);
+	std::cout << "After: ";
+	for (int x : m_result) {
+		std::cout << x << " ";
+	}
+	std::cout << "\n";
 
-    // Step 3: insert the pend (smaller) elements using binary search
-    size_t pendSize = n / 2;
-    size_t insertComparisons = 0;
-    for (size_t k = 1; k <= pendSize; ++k) {
-        insertComparisons += (size_t)std::ceil(std::log2(k + 1)); 
-        // +1 ensures log2(1)=0 is counted properly
-    }
-
-    return (pairComparisons + recursiveComparisons + insertComparisons);
+	//TODO: Implement the printing of the time
 }
+
+
 
 std::vector<size_t> generateJacobstahl(size_t n) {
     std::vector<size_t> jacobstahl;
@@ -63,7 +64,8 @@ std::vector<size_t> generateJacobstahl(size_t n) {
 }
 
 std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
-    if (n == 0) return std::vector<size_t>();
+    if (n == 0) 
+        return std::vector<size_t>();
 
     std::vector<size_t> jacobstahl = generateJacobstahl(n);
     std::vector<size_t> order;
@@ -88,6 +90,9 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
             order.push_back(i);
         }
     }
+
+
+
 
     return order;
 }
@@ -134,7 +139,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
             if (pairs[j].main == main_chain[i]) {
                 m_comparaisons++;
                 sortedPairs.push_back(pairs[j]);
-                pairs[j].main = -1; // Mark as used
+                pairs[j].main = -1;
                 break;
             }
         }
@@ -143,29 +148,27 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
     // Start with sorted biggest vector
     std::vector<int> result = main_chain;
 
-    std::cout << "biggest: ";
-	for (int x : main_chain) {
-		std::cout << x  << ".";
-	}
     // Insert first smaller element at the beginning
     if (!sortedPairs.empty()) {
         result.insert(result.begin(), sortedPairs[0].pend);
     }
 
     // Get Jacobstahl insertion order for remianing smaller elements
-    std::vector<size_t> order = getJacobsthalOrder(sortedPairs.size());
+    std::vector<size_t> order = getJacobsthalOrder(sortedPairs.size() - 1);
 
     // Insert remaining smaller elements in Jacobstahl order
     for (size_t i = 0; i < order.size(); i++) {
         size_t idx = order[i];
+        	std::cout << order[i] << ".";
         if (idx == 0) 
             continue;
-        if (idx >= sortedPairs.size()) continue;
-
+        if (idx >= sortedPairs.size()) 
+            continue;
 
         int toInsert = sortedPairs[idx].pend;
         int pairBigger = sortedPairs[idx].main;
 
+        //Max pos is the pend's pair 
         size_t maxPos = 0;
         for (size_t j = 0; j < result.size(); j++) {
             if (result[j] == pairBigger) {
@@ -189,7 +192,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
         result.insert(result.begin() + left, toInsert);
     }
 
-    // Insert straggler if exists
+    // Insert straggler without jacobstahl order 
     if (has_leftover) {
         size_t pos = 0;
         while (pos < result.size() && result[pos] < leftover) {

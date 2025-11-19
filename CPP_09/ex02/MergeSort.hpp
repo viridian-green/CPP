@@ -39,6 +39,7 @@ class MergeSort{
      std::vector<int> jacobsthalOrder(size_t n) ;
     std::vector<int> FJAlgo(std::vector<int> input);
     std::vector<size_t> getJacobsthalOrder(size_t n);
+    void printResult();
 
     private:
     std::vector<int> m_sequence;
@@ -107,25 +108,7 @@ class MergeSort{
 
 
 // template <typename Container>
-// void MergeSort<Container>::printResult()
-// {
-//     if (m_result[0] == -1)
-//         m_result = m_sequence;
 
-// 	std::cout << "Before: ";
-// 	for (int x : m_sequence) {
-// 		std::cout << x << " ";
-// 	}
-// 	std::cout << "\n";
-
-// 	std::cout << "After: ";
-// 	for (int x : m_result) {
-// 		std::cout << x << " ";
-// 	}
-// 	std::cout << "\n";
-
-// 	//TODO: Implement the printing of the time
-// }
 
 
 
