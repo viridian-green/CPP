@@ -218,25 +218,38 @@ public:
         if (m_result.empty() || (m_result.size() > 0 && *m_result.begin() == -1))
             m_result = m_sequence;
 
-        std::cout << "Before:  ";
-        for (auto it = m_sequence.begin(); it != m_sequence.end(); ++it) {
-            std::cout << *it << " ";
-        }
-        std::cout << "\n";
+        // std::cout << "Before:  ";
+        // for (auto it = m_sequence.begin(); it != m_sequence.end(); ++it) {
+        //     std::cout << *it << " ";
+        // }
+        // std::cout << "\n";
 
-        std::cout << "After:  ";
-        for (auto it = m_result.begin(); it != m_result.end(); ++it) {
-            std::cout << *it << " ";
-        }
-        std::cout << "\n";
+        // std::cout << "After:  ";
+        // for (auto it = m_result.begin(); it != m_result.end(); ++it) {
+        //     std::cout << *it << " ";
+        // }
+        // std::cout << "\n";
 
         std::cout << "Time to process a range of " << m_sequence.size() << " elements: ";
         std::printf("%.6fs\n", dur_vec);
         
-        std::cout << "Comparisons used: " << getNbrComparaisons() << std::endl;
+        // std::cout << "Comparisons used: " << getNbrComparaisons() << std::endl;
+
+    // std::cout << "order: ";
+	// for (size_t x : getOrder()) {
+	// 	std::cout << x + 1 << " ";
+	// }
     }
 
     void vec_duration() {
+        clock_t start = clock();
+        // Your sorting logic here
+        clock_t end = clock();
+        dur_vec = double(end - start) / CLOCKS_PER_SEC;
+    }
+
+
+    void deq_duration() {
         clock_t start = clock();
         // Your sorting logic here
         clock_t end = clock();
