@@ -154,7 +154,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
     }
 
     // Get Jacobstahl insertion order for remianing smaller elements
-    std::vector<size_t> order = getJacobsthalOrder(sortedPairs.size() - 1);
+    std::vector<size_t> order = getJacobsthalOrder(sortedPairs.size());
 
     // Insert remaining smaller elements in Jacobstahl order
     for (size_t i = 0; i < order.size(); i++) {
