@@ -15,12 +15,17 @@ int main(int ac, char **av)
 		std::cerr << "Error. You must input a positive integer sequence" << std::endl;
 		return 1;
 	}
-
+	vec.vec_duration();
     vec.FJAlgo(vec.getInput());
 
-	std::cout << "Comparaisons used :" << vec.getNbrComparaisons() << std::endl;
+	
+    std::cout << "order: ";
+	for (size_t x : vec.getOrder()) {
+		std::cout << x + 1 << ".";
+	}
+
     // deq.FJalgo();
-	// vec.printResult();
+	vec.printResult();
 
 	// MergeSort deq;
 

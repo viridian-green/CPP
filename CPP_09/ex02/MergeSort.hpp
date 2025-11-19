@@ -6,7 +6,7 @@
 #include <string>
 #include <iostream>
 #include <deque>
-#include <set>
+#include <time.h>
 
 //I keep the original pair and will never break that relationship
 struct Pair {
@@ -32,12 +32,13 @@ class MergeSort{
     std::vector<int> getInput();
     int getNbrComparaisons();
     size_t maxFJComparisons(size_t n);
-	// int_container jacobsthalOrder(size_t n);
+    void vec_duration();
     std::vector<Pair> make_pairs(std::vector<int> nums);
     std::vector<int> find_pend(std::vector<Pair> pairs);
     std::vector<int> find_main(std::vector<Pair> pairs);
      std::vector<int> jacobsthalOrder(size_t n) ;
     std::vector<int> FJAlgo(std::vector<int> input);
+    std::vector<size_t> getOrder();
     std::vector<size_t> getJacobsthalOrder(size_t n);
     void printResult();
 
@@ -46,6 +47,8 @@ class MergeSort{
 	std::vector<int> m_result;
     int m_comparaisons = 0;
     int m_leftover = 0;
+    std::vector<size_t> order;
+    double dur_vec;
 
 };
 
