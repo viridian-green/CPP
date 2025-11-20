@@ -29,6 +29,7 @@ private:
     Container m_result;
     int m_comparaisons;
     double dur_vec;
+    double dur_deq;
     std::vector<size_t> order;
 
     std::vector<size_t> generateJacobstahl(size_t n) {
@@ -255,6 +256,16 @@ public:
         clock_t end = clock();
         dur_vec = double(end - start) / CLOCKS_PER_SEC;
     }
+
+
+void setDurVec(double input)
+{
+    dur_vec = input;
+}
+void setDurDeq(double input)
+{
+    dur_deq = input;
+}
 
 
     void deq_duration() {
