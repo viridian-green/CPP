@@ -18,8 +18,8 @@
 // 	vec.vec_duration();
 //     vec.FJAlgo(vec.getInput());
 
-	
-   
+
+
 
 //     // deq.FJalgo();
 // 	vec.printResult();
@@ -38,13 +38,13 @@ int main(int argc, char** argv) {
 	sorterVec.vec_duration();
     auto resultVec = sorterVec.FJAlgo(inputVec);
     sorterVec.printResult();
-    
+
     MergeSort<std::deque<int>> sorterDeque;
     sorterDeque.parseInput(argc, argv);
     auto inputDeque = sorterDeque.getInput();
 	sorterDeque.vec_duration();
     auto resultDeque = sorterDeque.FJAlgo(inputDeque);
     sorterDeque.printResult();
-    
+
     return 0;
 }

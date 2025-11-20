@@ -7,6 +7,8 @@
 #include <iostream>
 #include <deque>
 #include <time.h>
+#include <chrono>
+
 
 //I keep the original pair and will never break that relationship
 struct Pair {

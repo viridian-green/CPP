@@ -6,6 +6,14 @@
 #include <ctime>
 #include <iostream>
 #include <vector>
+#include <sstream>
+#include <vector>
+#include <algorithm>
+#include <string>
+#include <iostream>
+#include <deque>
+#include <time.h>
+#include <chrono>
 
 template<typename Container>
 struct PairWithIndex {
@@ -26,14 +34,14 @@ private:
     std::vector<size_t> generateJacobstahl(size_t n) {
         std::vector<size_t> jacobstahl;
         jacobstahl.push_back(0);
-        if (n > 0) 
+        if (n > 0)
             jacobstahl.push_back(1);
 
         size_t idx = 1;
         while (true) {
             size_t next = jacobstahl[idx] + 2 * jacobstahl[idx - 1];
             jacobstahl.push_back(next);
-            if (next >= n) 
+            if (next >= n)
                 break;
             idx++;
         }
@@ -42,7 +50,7 @@ private:
     }
 
     std::vector<size_t> getJacobsthalOrder(size_t n) {
-        if (n == 0) 
+        if (n == 0)
             return std::vector<size_t>();
 
         std::vector<size_t> jacobstahl = generateJacobstahl(n);
@@ -154,9 +162,9 @@ public:
         // Insert remaining pends in Jacobsthal order
         for (size_t i = 0; i < order.size(); i++) {
             size_t idx = order[i];
-            if (idx == 0) 
+            if (idx == 0)
                 continue;
-            if (idx >= sortedPairs.size()) 
+            if (idx >= sortedPairs.size())
                 continue;
 
             typename Container::value_type toInsert = sortedPairs[idx].pend;
@@ -179,7 +187,7 @@ public:
                 size_t mid = left + (right - left) / 2;
                 auto mid_it = m_result.begin();
                 std::advance(mid_it, mid);
-                
+
                 if (*mid_it < toInsert) {
                     m_comparaisons++;
                     left = mid + 1;
@@ -187,7 +195,7 @@ public:
                     right = mid;
                 }
             }
-            
+
             auto insert_pos = m_result.begin();
             std::advance(insert_pos, left);
             m_result.insert(insert_pos, toInsert);
@@ -218,21 +226,21 @@ public:
         if (m_result.empty() || (m_result.size() > 0 && *m_result.begin() == -1))
             m_result = m_sequence;
 
-        // std::cout << "Before:  ";
-        // for (auto it = m_sequence.begin(); it != m_sequence.end(); ++it) {
-        //     std::cout << *it << " ";
-        // }
-        // std::cout << "\n";
+        std::cout << "Before:  ";
+        for (auto it = m_sequence.begin(); it != m_sequence.end(); ++it) {
+            std::cout << *it << " ";
+        }
+        std::cout << "\n";
 
-        // std::cout << "After:  ";
-        // for (auto it = m_result.begin(); it != m_result.end(); ++it) {
-        //     std::cout << *it << " ";
-        // }
-        // std::cout << "\n";
+        std::cout << "After:  ";
+        for (auto it = m_result.begin(); it != m_result.end(); ++it) {
+            std::cout << *it << " ";
+        }
+        std::cout << "\n";
 
         std::cout << "Time to process a range of " << m_sequence.size() << " elements: ";
         std::printf("%.6fs\n", dur_vec);
-        
+
         // std::cout << "Comparisons used: " << getNbrComparaisons() << std::endl;
 
     // std::cout << "order: ";
@@ -265,4 +273,4 @@ public:
     }
 };
 
-#endif 
+#endif
