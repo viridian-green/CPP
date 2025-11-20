@@ -269,6 +269,20 @@ Container FJAlgo(Container input) {
     return m_result;
 }
 
+void setDurVec(double input)
+{
+    dur_vec = input;
+}
+void setDurDeq(double input)
+{
+    dur_deq = input;
+}
+
+Container getInput()
+{
+	return m_sequence;
+}
+
 
 void printResult() {
     if (m_result.empty() || m_result.size() > 0 )
