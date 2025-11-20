@@ -4,7 +4,7 @@ FLAGS = -Wall -Wextra -Werror -std=c++98
 #FLAGS = -std=c++17
 
 #SRC = PMergeTest.cpp
-SRC = main.cpp MergeSort.cpp
+SRC = main.cpp
 
 OBJ = $(SRC:%.cpp=%.o)
 

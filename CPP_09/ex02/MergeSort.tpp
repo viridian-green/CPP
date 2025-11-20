@@ -32,7 +32,25 @@ private:
     double dur_deq;
     std::vector<size_t> order;
 
-    std::vector<size_t> generateJacobstahl(size_t n) {
+public:
+    MergeSort() : m_comparaisons(0), dur_vec(0.0), m_result(0) {}
+
+    int parseInput(int ac, char **arg) {
+        for (int i = 1; i < ac; i++) {
+            std::string token = arg[i];
+            if (::isdigit(token[0])) {
+                int value = std::stoi(token.c_str());
+                if (std::find(m_sequence.begin(), m_sequence.end(), value) == m_sequence.end() && value >= 0) {
+                    m_sequence.push_back(value);
+                }
+            } else {
+                return 1;
+            }
+        }
+        return 0;
+    }
+
+        std::vector<size_t> generateJacobstahl(size_t n) {
         std::vector<size_t> jacobstahl;
         jacobstahl.push_back(0);
         if (n > 0)
@@ -79,24 +97,6 @@ private:
         }
 
         return order;
-    }
-
-public:
-    MergeSort() : m_comparaisons(0), dur_vec(0.0) {}
-
-    int parseInput(int ac, char **arg) {
-        for (int i = 1; i < ac; i++) {
-            std::string token = arg[i];
-            if (::isdigit(token[0])) {
-                int value = std::stoi(token.c_str());
-                if (std::find(m_sequence.begin(), m_sequence.end(), value) == m_sequence.end() && value >= 0) {
-                    m_sequence.push_back(value);
-                }
-            } else {
-                return 1;
-            }
-        }
-        return 0;
     }
 
     Container FJAlgo(Container input) {
@@ -239,7 +239,7 @@ public:
         }
         std::cout << "\n";
 
-        std::cout << "Time to process a range of " << m_sequence.size() << " elements: ";
+        std::cout << "Time to process a range of " << m_sequence.size() << " elements: with std::vector : ";
         std::printf("%.6fs\n", dur_vec);
 
         // std::cout << "Comparisons used: " << getNbrComparaisons() << std::endl;
