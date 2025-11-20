@@ -27,6 +27,7 @@ MergeSort::MergeSort(const MergeSort &oth)
   dur_vec(oth.dur_vec),
   dur_deq(oth.dur_deq)
 {}
+
 MergeSort &MergeSort::operator=(const MergeSort &oth) {
     if (this != &oth) {
         vec_sequence = oth.vec_sequence;
@@ -82,6 +83,8 @@ void MergeSort::setDurDeq(double input)
     dur_deq = input;
 }
 
+
+//Code for vector
 void MergeSort::printResultV()
 {
     if (vec_result.empty() || (vec_result.size() > 0 && *vec_result.begin() == -1))
@@ -111,7 +114,6 @@ void MergeSort::printResultV()
     std::cout << "\n";
 
 }
-
 
 void MergeSort::printResultD()
 {
@@ -193,6 +195,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
     return order;
 }
 
+//TODO: do the same for other function
  std::vector<int> MergeSort::FJAlgoVec(std::vector<int> input){
 
     if (input.size() <= 1) {
@@ -203,10 +206,9 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
     int leftover = -1;
     bool has_leftover = false;
 
-    //
     std::vector<int> main_chain;
+	std::vector<int> pend_chain;
 
-//Keep track of original pairing when building the pairs
     for (size_t i = 0; i + 1 < input.size(); i += 2) {
         PairWithIndex p;
         if (input[i] < input[i + 1]) {
@@ -216,17 +218,16 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
         p.main = input[i];
         p.pend = input[i + 1];
         main_chain.push_back(input[i]);
+		pend_chain.push_back(input[i + 1]);
         p.originalIndex = pairs.size();
         pairs.push_back(p);
     }
 
-    // Handle odd number of elements (straggler)
     if (input.size() % 2 == 1) {
         leftover = input.back();
         has_leftover = true;
     }
 
-    // Recursively sort the main chain
     main_chain = FJAlgoVec(main_chain);
 
     std::vector<PairWithIndex> sortedPairs;
@@ -241,15 +242,11 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
         }
     }
 
-    vec_result = main_chain;
-
-    // Insert first smaller element at the beginning
     if (!sortedPairs.empty()) {
         vec_result.insert(vec_result.begin(), sortedPairs[0].pend);
     }
 
-    // Get Jacobstahl insertion order for remianing smaller elements
-   order = getJacobsthalOrder(sortedPairs.size());
+   order = getJacobsthalOrder(pend_chain.size());
 
     // Insert remaining smaller elements in Jacobstahl order
     for (size_t i = 0; i < order.size(); i++) {
