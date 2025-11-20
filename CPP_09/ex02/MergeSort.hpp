@@ -34,7 +34,6 @@ class MergeSort{
     void setDurVec(double input);
     void setDurDeq(double input);
     int getNbrComparaisons();
-    std::vector<int> jacobsthalOrder(size_t n) ;
     std::vector<int> FJAlgoVec(std::vector<int> input);
     std::vector<int> getInput();
     std::vector<size_t> getOrder();
@@ -44,7 +43,7 @@ class MergeSort{
     std::deque<int> DgetInput();
     std::deque<int> FJAlgoDeq(std::deque<int> input);
     std::deque<size_t> DgetJacobsthalOrder(size_t n);
-     void printResultD();
+    void printResultD();
 
     private:
     std::vector<int> vec_sequence;
@@ -54,6 +53,7 @@ class MergeSort{
     int m_comparaisons = 0;
     int m_leftover = 0;
     std::vector<size_t> order;
+    std::deque<size_t> d_order;
     double dur_vec;
     double dur_deq;
 

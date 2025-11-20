@@ -3,30 +3,49 @@
 
 MergeSort::MergeSort()
 : vec_sequence(),
-vec_result(),
-m_comparaisons(0)
+  vec_result(),
+  deq_sequence(),
+  d_result(),
+  m_comparaisons(0),
+  m_leftover(0),
+  order(),
+  d_order(),
+  dur_vec(0),
+  dur_deq(0)
 {}
+
 
 MergeSort::MergeSort(const MergeSort &oth)
 : vec_sequence(oth.vec_sequence),
-vec_result(oth.vec_result),
-m_comparaisons(oth.m_comparaisons),
-dur_vec(oth.dur_vec),
-dur_deq(oth.dur_deq),
-order(oth.order)
+  vec_result(oth.vec_result),
+  deq_sequence(oth.deq_sequence),
+  d_result(oth.d_result),
+  m_comparaisons(oth.m_comparaisons),
+  m_leftover(oth.m_leftover),
+  order(oth.order),
+  d_order(oth.d_order),
+  dur_vec(oth.dur_vec),
+  dur_deq(oth.dur_deq)
 {}
-
 MergeSort &MergeSort::operator=(const MergeSort &oth) {
-if (this != &oth) {
-    vec_sequence = oth.vec_sequence;
-    vec_result = oth.vec_result;
-    m_comparaisons = oth.m_comparaisons;
-    dur_vec = oth.dur_vec;
-    dur_deq = oth.dur_deq;
-    order = oth.order;
+    if (this != &oth) {
+        vec_sequence = oth.vec_sequence;
+        vec_result = oth.vec_result;
+        deq_sequence = oth.deq_sequence;
+        d_result = oth.d_result;
+
+        m_comparaisons = oth.m_comparaisons;
+        m_leftover = oth.m_leftover;
+
+        order = oth.order;
+        d_order = oth.d_order;
+
+        dur_vec = oth.dur_vec;
+        dur_deq = oth.dur_deq;
+    }
+    return *this;
 }
-return *this;
-}
+
 
 MergeSort::~MergeSort() {}
 
@@ -85,10 +104,10 @@ void MergeSort::printResultV()
 
     std::cout << "Comparisons used: " << getNbrComparaisons() << std::endl;
 
-    // std::cout << "order: ";
-    // for (size_t x : getOrder()) {
-    // 	std::cout << x + 1 << " ";
-    // }
+    std::cout << "order: ";
+    for (size_t x : getOrder()) {
+    	std::cout << x + 1 << " ";
+    }
     std::cout << "\n";
 
 }
@@ -123,8 +142,6 @@ void MergeSort::printResultD()
     std::cout << "\n";
 
 }
-
-
 
 int MergeSort::parseInputV(int ac, char **arg) {
 
@@ -284,10 +301,14 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
 
 
 
+
+
+
 std::deque<int> MergeSort::DgetInput()
 {
 	return deq_sequence;
 }
+
 
 
 
@@ -322,7 +343,7 @@ std::deque<size_t> MergeSort::DgetJacobsthalOrder(size_t n) {
     return order;
 }
 
-std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input) {
+ std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input){
 
     if (input.size() <= 1) {
         return input;
@@ -378,11 +399,11 @@ std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input) {
     }
 
     // Get Jacobstahl insertion order for remianing smaller elements
-   order = getJacobsthalOrder(sortedPairs.size());
+   d_order = DgetJacobsthalOrder(sortedPairs.size());
 
     // Insert remaining smaller elements in Jacobstahl order
-    for (size_t i = 0; i < order.size(); i++) {
-        size_t idx = order[i];
+    for (size_t i = 0; i < d_order.size(); i++) {
+        size_t idx = d_order[i];
         if (idx == 0)
             continue;
         if (idx >= sortedPairs.size())
@@ -427,3 +448,4 @@ std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input) {
 
     return d_result;
 }
+

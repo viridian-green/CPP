@@ -11,7 +11,14 @@ int main(int ac, char **av)
 
     MergeSort vec;
     MergeSort deq;
+
 	if (vec.parseInputV(ac, av))
+	{
+		std::cerr << "Error. You must input a positive integer sequence" << std::endl;
+		return 1;
+	}
+
+    if (deq.parseInputV(ac, av))
 	{
 		std::cerr << "Error. You must input a positive integer sequence" << std::endl;
 		return 1;
@@ -21,18 +28,12 @@ int main(int ac, char **av)
     vec.FJAlgoVec(vec.getInput());
     auto end = std::chrono::high_resolution_clock::now();
     vec.setDurVec(std::chrono::duration<double>(end - start).count());
-    // vec.printResultV();
-
-    // if (deq.parseInputD(ac, av))
-	// {
-	// 	std::cerr << "Error. You must input a positive integer sequence" << std::endl;
-	// 	return 1;
-	// }
+    vec.printResultV();
 
     start = std::chrono::high_resolution_clock::now();
     deq.FJAlgoDeq(deq.DgetInput());
     end = std::chrono::high_resolution_clock::now();
     deq.setDurDeq(std::chrono::duration<double>(end - start).count());
-	vec.printResultD();
+	deq.printResultD();
 
 }
