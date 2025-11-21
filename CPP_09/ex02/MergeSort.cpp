@@ -164,36 +164,56 @@ int MergeSort::parseInputV(int ac, char **arg) {
     return 0;
 }
 
-std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
-    if (n == 0)
-        return std::vector<size_t>();
 
-    std::vector<size_t> jacobstahl = {0, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525, 699051, 1398101, 2796203, 5592405, 11184811, 22369621, 44739243, 89478485, 178956971, 357913941, 715827883, 1431655765};
-    std::vector<size_t> order;
-    std::vector<bool> used(n, false);
+    std::vector<size_t> MergeSort::generateJacobstahl(size_t n) {
+        std::vector<size_t> jacobstahl;
+        jacobstahl.push_back(0);
+        if (n > 0)
+            jacobstahl.push_back(1);
 
-    for (size_t i = 1; i < jacobstahl.size(); i++) {
-        size_t jMax = jacobstahl[i];
-        size_t jPrev = jacobstahl[i - 1];
+        size_t idx = 1;
+        while (true) {
+            size_t next = jacobstahl[idx] + 2 * jacobstahl[idx - 1];
+            jacobstahl.push_back(next);
+            if (next >= n)
+                break;
+            idx++;
+        }
 
-        // Insert in descending order between jacobstahl numbers
-        for (size_t j = jMax; j > jPrev && j <= n; j--) {
-            if (j > 0 && !used[j - 1]) {
-                order.push_back(j - 1);
-                used[j - 1] = true;
+        return jacobstahl;
+    }
+
+    std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
+        if (n == 0)
+            return std::vector<size_t>();
+
+        std::vector<size_t> jacobstahl = generateJacobstahl(n);
+        std::vector<size_t> order;
+        std::vector<bool> used(n, false);
+
+        for (size_t i = 1; i < jacobstahl.size(); i++) {
+            size_t jCurrent = jacobstahl[i];
+            size_t jPrev = jacobstahl[i - 1];
+
+            size_t insertUpTo = std::min(jCurrent, n);
+
+            for (size_t j = insertUpTo; j > jPrev; j--) {
+                if (j > 0 && !used[j - 1]) {
+                    order.push_back(j - 1);
+                    used[j - 1] = true;
+                }
             }
         }
-    }
 
-    // Add any remaining elements
-    for (size_t i = 0; i < n; i++) {
-        if (!used[i]) {
-            order.push_back(i);
+        for (size_t i = 0; i < n; i++) {
+            if (!used[i]) {
+                order.push_back(i);
+            }
         }
+
+        return order;
     }
 
-    return order;
-}
 
 //TODO: do the same for other function
  std::vector<int> MergeSort::FJAlgoVec(std::vector<int> input){
@@ -246,7 +266,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
         vec_result.insert(vec_result.begin(), sortedPairs[0].pend);
     }
 
-   order = getJacobsthalOrder(pend_chain.size());
+   order = getJacobsthalOrder(sortedPairs.size());
 
     // Insert remaining smaller elements in Jacobstahl order
     for (size_t i = 0; i < order.size(); i++) {
@@ -295,10 +315,6 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
 
     return vec_result;
 }
-
-
-
-
 
 
 std::deque<int> MergeSort::DgetInput()

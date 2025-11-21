@@ -38,6 +38,7 @@ class MergeSort{
     std::vector<int> getInput();
     std::vector<size_t> getOrder();
     std::vector<size_t> getJacobsthalOrder(size_t n);
+    std::vector<size_t> generateJacobstahl(size_t n);
     void printResultV();
 
     std::deque<int> DgetInput();
