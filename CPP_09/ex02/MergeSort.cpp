@@ -167,25 +167,6 @@ int MergeSort::parseInputV(int ac, char **arg) {
     return 0;
 }
 
-
-    // std::vector<size_t> MergeSort::generateJacobstahl(size_t n) {
-    //     std::vector<size_t> jacobstahl;
-    //     jacobstahl.push_back(0);
-    //     if (n > 0)
-    //         jacobstahl.push_back(1);
-
-    //     size_t idx = 1;
-    //     while (true) {
-    //         size_t next = jacobstahl[idx] + 2 * jacobstahl[idx - 1];
-    //         jacobstahl.push_back(next);
-    //         if (next >= n)
-    //             break;
-    //         idx++;
-    //     }
-
-    //     return jacobstahl;
-    // }
-
     std::vector<size_t> MergeSort::generateJacobstahl(size_t n) {
     std::vector<size_t> jacobstahl;
     jacobstahl.push_back(0);
@@ -236,7 +217,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
     return order;
 }
 
-    std::vector<int> MergeSort::FJAlgoVec(std::vector<int> input){
+std::vector<int> MergeSort::FJAlgoVec(std::vector<int> input){
     if (input.size() <= 1) {
         return input;
     }
@@ -268,38 +249,54 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
         pend_chain.push_back(*second);
         p.originalIndex = pairs.size();
         pairs.push_back(p);
-    }
+    }std::cout << "\n=== BEFORE RECURSION ===" << std::endl;
+    std::cout << "Main chain: ";
+    for (auto val : main_chain) std::cout << val << " ";
+    std::cout << std::endl;
+    std::cout << "Pend chain: ";
+    for (auto val : pend_chain) std::cout << val << " ";
+    std::cout << std::endl;
 
     main_chain = FJAlgoVec(main_chain);
 
-    std::vector<PairWithIndex> sortedPairs;
-    for (auto it = main_chain.begin(); it != main_chain.end(); ++it) {
-        for (size_t j = 0; j < pairs.size(); j++) {
-            if (pairs[j].main == *it) {
-                sortedPairs.push_back(pairs[j]);
-                pairs[j].main = -1;
-                break;
-            }
-        }
-    }
+    std::cout << "\n=== AFTER RECURSION ===" << std::endl;
+    std::cout << "Sorted main chain: ";
+    for (auto val : main_chain) std::cout << val << " ";
+    std::cout << std::endl;
 
     vec_result = main_chain;
 
-    if (!sortedPairs.empty()) {
-        vec_result.insert(vec_result.begin(), sortedPairs[0].pend);
+    std::cout << "\n=== INSERTION PROCESS ===" << std::endl;
+    std::cout << "Initial result (main chain): ";
+    for (auto val : vec_result) std::cout << val << " ";
+    std::cout << std::endl;
+
+    if (!pairs.empty()) {
+        vec_result.insert(vec_result.begin(), pairs[0].pend);
+        std::cout << "Inserted first pend element (" << pairs[0].pend << ") at front: ";
+        for (auto val : vec_result) std::cout << val << " ";
+        std::cout << std::endl;
     }
 
     order = getJacobsthalOrder(pend_chain.size());
+
+    std::cout << "\nJacobsthal order: ";
+    for (auto idx : order) std::cout << idx + 1 << " ";
+    std::cout << std::endl << std::endl;
 
     for (size_t i = 0; i < order.size(); i++) {
         size_t idx = order[i];
         if (idx == 0)
             continue;
-        if (idx >= sortedPairs.size())
+        if (idx >= pairs.size())
             continue;
 
-        int toInsert = sortedPairs[idx].pend;
-        int pairBigger = sortedPairs[idx].main;
+        int toInsert = pairs[idx].pend;
+        int pairBigger = pairs[idx].main;
+
+        std::cout << "--- Step " << i << " ---" << std::endl;
+        std::cout << "Inserting pend[" << idx + 1 << "] = " << toInsert
+                  << " (paired with main = " << pairBigger << ")" << std::endl;
 
         size_t maxPos = 0;
         for (size_t j = 0; j < vec_result.size(); j++) {
@@ -308,6 +305,7 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
                 break;
             }
         }
+        std::cout << "Search range: [0, " << maxPos << "]" << std::endl;
 
         size_t left = 0;
         size_t right = maxPos + 1;
@@ -316,23 +314,36 @@ std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
             auto mid_it = vec_result.begin();
             std::advance(mid_it, mid);
             m_comparaisons++;
+            std::cout << "  Binary search: mid=" << mid << ", value=" << *mid_it;
             if (*mid_it < toInsert) {
+                std::cout << " < " << toInsert << " -> search right" << std::endl;
                 left = mid + 1;
             } else {
+                std::cout << " >= " << toInsert << " -> search left" << std::endl;
                 right = mid;
             }
         }
 
-         vec_result.insert(vec_result.begin() + left, toInsert);
+        vec_result.insert(vec_result.begin() + left, toInsert);
+        std::cout << "Inserted at position " << left << ": ";
+        for (auto val : vec_result) std::cout << val << " ";
+        std::cout << std::endl << std::endl;
     }
 
     if (has_leftover) {
+        std::cout << "=== INSERTING STRAGGLER ===" << std::endl;
+        std::cout << "Straggler value: " << leftover << std::endl;
         size_t pos = 0;
         while (pos < vec_result.size() && vec_result[pos] < leftover) {
             m_comparaisons++;
+            std::cout << "  Comparing position " << pos << ": "
+                      << vec_result[pos] << " < " << leftover << std::endl;
             pos++;
         }
         vec_result.insert(vec_result.begin() + pos, leftover);
+        std::cout << "Inserted straggler at position " << pos << ": ";
+        for (auto val : vec_result) std::cout << val << " ";
+        std::cout << std::endl;
     }
 
     return vec_result;
@@ -375,109 +386,98 @@ std::deque<size_t> MergeSort::DgetJacobsthalOrder(size_t n) {
     return order;
 }
 
-//  std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input){
 
-//     if (input.size() <= 1) {
-//         return input;
-//     }
+ std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input){
+    if (input.size() <= 1) {
+        return input;
+    }
 
-//     std::deque<PairWithIndex> pairs;
-//     int leftover = -1;
-//     bool has_leftover = false;
+    std::deque<PairWithIndex> pairs;
+    int  leftover = -1;
+    bool has_leftover = false;
 
-//     //
-//     std::deque<int> main_chain;
+    std::deque<int> main_chain;
+    std::deque<int> pend_chain;
 
-// //Keep track of original pairing when building the pairs
-//     for (size_t i = 0; i + 1 < input.size(); i += 2) {
-//         PairWithIndex p;
-//         if (input[i] < input[i + 1]) {
-//             m_comparaisons++;
-//             std::swap(input[i], input[i + 1]);
-//         }
-//         p.main = input[i];
-//         p.pend = input[i + 1];
-//         main_chain.push_back(input[i]);
-//         p.originalIndex = pairs.size();
-//         pairs.push_back(p);
-//     }
+    auto it = input.begin();
+    while (it != input.end()) {
+        auto first = it++;
+        if (it == input.end()) {
+            leftover = *first;
+            has_leftover = true;
+            break;
+        }
+        auto second = it++;
 
-//     // Handle odd number of elements (straggler)
-//     if (input.size() % 2 == 1) {
-//         leftover = input.back();
-//         has_leftover = true;
-//     }
+        PairWithIndex p;
+        if (*first < *second) {
+            std::swap(*first, *second);
+        }
+        p.main = *first;
+        p.pend = *second;
+        main_chain.push_back(*first);
+        pend_chain.push_back(*second);
+        p.originalIndex = pairs.size();
+        pairs.push_back(p);
+    }
 
-//     // Recursively sort the main chain
-//     main_chain = FJAlgoDeq(main_chain);
+    main_chain = FJAlgoDeq(main_chain);
 
-//     std::deque<PairWithIndex> sortedPairs;
-//     for (size_t i = 0; i < main_chain.size(); i++) {
-//         for (size_t j = 0; j < pairs.size(); j++) {
-//             if (pairs[j].main == main_chain[i]) {
-//                 m_comparaisons++;
-//                 sortedPairs.push_back(pairs[j]);
-//                 pairs[j].main = -1;
-//                 break;
-//             }
-//         }
-//     }
 
-//     d_result = main_chain;
+    d_result = main_chain;
 
-//     // Insert first smaller element at the beginning
-//     if (!sortedPairs.empty()) {
-//         d_result.insert(d_result.begin(), sortedPairs[0].pend);
-//     }
 
-//     // Get Jacobstahl insertion order for remianing smaller elements
-//    d_order = DgetJacobsthalOrder(sortedPairs.size());
+    if (!pairs.empty()) {
+        d_result.insert(d_result.begin(), pairs[0].pend);
+    }
 
-//     // Insert remaining smaller elements in Jacobstahl order
-//     for (size_t i = 0; i < d_order.size(); i++) {
-//         size_t idx = d_order[i];
-//         if (idx == 0)
-//             continue;
-//         if (idx >= sortedPairs.size())
-//             continue;
+    d_order = DgetJacobsthalOrder(pend_chain.size());
 
-//         int toInsert = sortedPairs[idx].pend;
-//         int pairBigger = sortedPairs[idx].main;
+    for (size_t i = 0; i < order.size(); i++) {
+        size_t idx = order[i];
+        if (idx == 0)
+            continue;
+        if (idx >= pairs.size())
+            continue;
 
-//         //Max pos is the pend's pair
-//         size_t maxPos = 0;
-//         for (size_t j = 0; j < d_result.size(); j++) {
-//             if (d_result[j] == pairBigger) {
-//                 maxPos = j;
-//                 break;
-//             }
-//         }
+        int toInsert = pairs[idx].pend;
+        int pairBigger = pairs[idx].main;
 
-//         // Binary search up to the paired element's position
-//         size_t left = 0;
-//         size_t right = maxPos + 1;
-//         while (left < right) {
-//             size_t mid = left + (right - left) / 2;
-//             if (d_result[mid] < toInsert) {
-//                 m_comparaisons++;
-//                 left = mid + 1;
-//             } else {
-//                 right = mid;
-//             }
-//         }
-//         d_result.insert(d_result.begin() + left, toInsert);
-//     }
 
-//     // Insert straggler without jacobstahl order
-//     if (has_leftover) {
-//         size_t pos = 0;
-//         while (pos < d_result.size() && d_result[pos] < leftover) {
-//             m_comparaisons++;
-//             pos++;
-//         }
-//         d_result.insert(d_result.begin() + pos, leftover);
-//     }
+        size_t maxPos = 0;
+        for (size_t j = 0; j < d_result.size(); j++) {
+            if (vec_result[j] == pairBigger) {
+                maxPos = j;
+                break;
+            }
+        }
 
-//     return d_result;
-// }
+        size_t left = 0;
+        size_t right = maxPos + 1;
+        while (left < right) {
+            size_t mid = left + (right - left) / 2;
+            auto mid_it = d_result.begin();
+            std::advance(mid_it, mid);
+            m_comparaisons++;
+            if (*mid_it < toInsert) {
+                left = mid + 1;
+            } else {
+                right = mid;
+            }
+        }
+
+        d_result.insert(d_result.begin() + left, toInsert);
+    }
+
+    if (has_leftover) {
+        size_t pos = 0;
+        while (pos < d_result.size() && vec_result[pos] < leftover) {
+            m_comparaisons++;
+            pos++;
+        }
+        d_result.insert(d_result.begin() + pos, leftover);
+    }
+
+    return d_result;
+}
 
