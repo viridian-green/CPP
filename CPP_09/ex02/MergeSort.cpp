@@ -242,7 +242,6 @@ int MergeSort::parseInputV(int ac, char **arg) {
         auto second = it++;
 
         PairWithIndex p;
-        m_comparaisons++;
         if (*first < *second) {
             std::swap(*first, *second);
         }
@@ -267,21 +266,13 @@ int MergeSort::parseInputV(int ac, char **arg) {
         }
     }
 
-    if (has_leftover) {
-        PairWithIndex stragglerPair;
-        stragglerPair.pend = leftover;
-        stragglerPair.main = -1;
-        stragglerPair.originalIndex = sortedPairs.size();
-        sortedPairs.push_back(stragglerPair);
-    }
-
     vec_result = main_chain;
 
     if (!sortedPairs.empty()) {
         vec_result.insert(vec_result.begin(), sortedPairs[0].pend);
     }
 
-    order = getJacobsthalOrder(pend_chain.size() + (has_leftover ? 1 : 0));
+    order = getJacobsthalOrder(pend_chain.size());
 
     for (size_t i = 0; i < order.size(); i++) {
         size_t idx = order[i];
@@ -293,18 +284,14 @@ int MergeSort::parseInputV(int ac, char **arg) {
         int toInsert = sortedPairs[idx].pend;
         int pairBigger = sortedPairs[idx].main;
 
-        size_t maxPos = vec_result.size() - 1;
-
-        if (pairBigger != -1) {
-            auto res_it = vec_result.begin();
-            for (size_t j = 0; j < vec_result.size(); j++, ++res_it) {
-                if (*res_it == pairBigger) {
-                    maxPos = j;
-                    break;
-                }
+        size_t maxPos = 0;
+        for (size_t j = 0; j < vec_result.size(); j++) {
+            if (vec_result[j] == pairBigger) {
+                maxPos = j;
+                break;
             }
         }
-
+        
         size_t left = 0;
         size_t right = maxPos + 1;
         while (left < right) {
@@ -319,9 +306,16 @@ int MergeSort::parseInputV(int ac, char **arg) {
             }
         }
 
-        auto insert_pos = vec_result.begin();
-        std::advance(insert_pos, left);
-        vec_result.insert(insert_pos, toInsert);
+         vec_result.insert(vec_result.begin() + left, toInsert);
+    }
+
+    if (has_leftover) {
+        size_t pos = 0;
+        while (pos < vec_result.size() && vec_result[pos] < leftover) {
+            m_comparaisons++;
+            pos++;
+        }
+        vec_result.insert(vec_result.begin() + pos, leftover);
     }
 
     return vec_result;
