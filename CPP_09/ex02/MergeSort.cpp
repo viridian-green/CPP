@@ -96,11 +96,14 @@ void MergeSort::printResultV()
 	}
 	std::cout << "\n";
 
-	std::cout << "After:  ";
-	for (int x : vec_result) {
-		std::cout << x << " ";
-	}
-	std::cout << "\n";
+    if (std::is_sorted(vec_result.begin(), vec_result.end()) && vec_result.size() == vec_sequence.size())
+        std::cout << "After:  ";
+    else
+        std::cout << "Output is incorrect!";
+    for (int x : vec_result) {
+        std::cout << x << " ";
+    }
+    std::cout << "\n";
 
     std::cout << "Time to process a range of " << vec_result.size() << " elements: with std::vector : ";
     std::printf("%.6fs\n", dur_vec);
@@ -165,29 +168,31 @@ int MergeSort::parseInputV(int ac, char **arg) {
 }
 
 
-    std::vector<size_t> MergeSort::generateJacobstahl(size_t n) {
-        std::vector<size_t> jacobstahl;
-        jacobstahl.push_back(0);
-        if (n > 0)
-            jacobstahl.push_back(1);
+    // std::vector<size_t> MergeSort::generateJacobstahl(size_t n) {
+    //     std::vector<size_t> jacobstahl;
+    //     jacobstahl.push_back(0);
+    //     if (n > 0)
+    //         jacobstahl.push_back(1);
 
-        size_t idx = 1;
-        while (true) {
-            size_t next = jacobstahl[idx] + 2 * jacobstahl[idx - 1];
-            jacobstahl.push_back(next);
-            if (next >= n)
-                break;
-            idx++;
-        }
+    //     size_t idx = 1;
+    //     while (true) {
+    //         size_t next = jacobstahl[idx] + 2 * jacobstahl[idx - 1];
+    //         jacobstahl.push_back(next);
+    //         if (next >= n)
+    //             break;
+    //         idx++;
+    //     }
 
-        return jacobstahl;
-    }
+    //     return jacobstahl;
+    // }
+
+
 
     std::vector<size_t> MergeSort::getJacobsthalOrder(size_t n) {
         if (n == 0)
             return std::vector<size_t>();
 
-        std::vector<size_t> jacobstahl = generateJacobstahl(n);
+        std::vector<size_t> jacobstahl = {1, 1, 3, 5, 11, 21, 43, 85, 171, 341, 683, 1365, 2731, 5461, 10923, 21845, 43691, 87381, 174763, 349525, 699051, 1398101, 2796203, 5592405, 11184811, 22369621, 44739243, 89478485, 178956971, 357913941, 715827883, 1431655765};
         std::vector<size_t> order;
         std::vector<bool> used(n, false);
 
@@ -214,47 +219,47 @@ int MergeSort::parseInputV(int ac, char **arg) {
         return order;
     }
 
-
-//TODO: do the same for other function
- std::vector<int> MergeSort::FJAlgoVec(std::vector<int> input){
-
+    std::vector<int> MergeSort::FJAlgoVec(std::vector<int> input){
     if (input.size() <= 1) {
         return input;
     }
 
     std::vector<PairWithIndex> pairs;
-    int leftover = -1;
+    int  leftover = -1;
     bool has_leftover = false;
 
     std::vector<int> main_chain;
-	std::vector<int> pend_chain;
+    std::vector<int> pend_chain;
 
-    for (size_t i = 0; i + 1 < input.size(); i += 2) {
-        PairWithIndex p;
-        if (input[i] < input[i + 1]) {
-            m_comparaisons++;
-            std::swap(input[i], input[i + 1]);
+    auto it = input.begin();
+    while (it != input.end()) {
+        auto first = it++;
+        if (it == input.end()) {
+            leftover = *first;
+            has_leftover = true;
+            break;
         }
-        p.main = input[i];
-        p.pend = input[i + 1];
-        main_chain.push_back(input[i]);
-		pend_chain.push_back(input[i + 1]);
+        auto second = it++;
+
+        PairWithIndex p;
+        m_comparaisons++;
+        if (*first < *second) {
+            std::swap(*first, *second);
+        }
+        p.main = *first;
+        p.pend = *second;
+        main_chain.push_back(*first);
+        pend_chain.push_back(*second);
         p.originalIndex = pairs.size();
         pairs.push_back(p);
-    }
-
-    if (input.size() % 2 == 1) {
-        leftover = input.back();
-        has_leftover = true;
     }
 
     main_chain = FJAlgoVec(main_chain);
 
     std::vector<PairWithIndex> sortedPairs;
-    for (size_t i = 0; i < main_chain.size(); i++) {
+    for (auto it = main_chain.begin(); it != main_chain.end(); ++it) {
         for (size_t j = 0; j < pairs.size(); j++) {
-            if (pairs[j].main == main_chain[i]) {
-                m_comparaisons++;
+            if (pairs[j].main == *it) {
                 sortedPairs.push_back(pairs[j]);
                 pairs[j].main = -1;
                 break;
@@ -262,13 +267,22 @@ int MergeSort::parseInputV(int ac, char **arg) {
         }
     }
 
+    if (has_leftover) {
+        PairWithIndex stragglerPair;
+        stragglerPair.pend = leftover;
+        stragglerPair.main = -1;
+        stragglerPair.originalIndex = sortedPairs.size();
+        sortedPairs.push_back(stragglerPair);
+    }
+
+    vec_result = main_chain;
+
     if (!sortedPairs.empty()) {
         vec_result.insert(vec_result.begin(), sortedPairs[0].pend);
     }
 
-   order = getJacobsthalOrder(sortedPairs.size());
+    order = getJacobsthalOrder(pend_chain.size() + (has_leftover ? 1 : 0));
 
-    // Insert remaining smaller elements in Jacobstahl order
     for (size_t i = 0; i < order.size(); i++) {
         size_t idx = order[i];
         if (idx == 0)
@@ -279,50 +293,44 @@ int MergeSort::parseInputV(int ac, char **arg) {
         int toInsert = sortedPairs[idx].pend;
         int pairBigger = sortedPairs[idx].main;
 
-        //Max pos is the pend's pair
-        size_t maxPos = 0;
-        for (size_t j = 0; j < vec_result.size(); j++) {
-            if (vec_result[j] == pairBigger) {
-                maxPos = j;
-                break;
+        size_t maxPos = vec_result.size() - 1;
+
+        if (pairBigger != -1) {
+            auto res_it = vec_result.begin();
+            for (size_t j = 0; j < vec_result.size(); j++, ++res_it) {
+                if (*res_it == pairBigger) {
+                    maxPos = j;
+                    break;
+                }
             }
         }
 
-        // Binary search up to the paired element's position
         size_t left = 0;
         size_t right = maxPos + 1;
         while (left < right) {
             size_t mid = left + (right - left) / 2;
-            if (vec_result[mid] < toInsert) {
-                m_comparaisons++;
+            auto mid_it = vec_result.begin();
+            std::advance(mid_it, mid);
+            m_comparaisons++;
+            if (*mid_it < toInsert) {
                 left = mid + 1;
             } else {
                 right = mid;
             }
         }
-        vec_result.insert(vec_result.begin() + left, toInsert);
-    }
 
-    // Insert straggler without jacobstahl order
-    if (has_leftover) {
-        size_t pos = 0;
-        while (pos < vec_result.size() && vec_result[pos] < leftover) {
-            m_comparaisons++;
-            pos++;
-        }
-        vec_result.insert(vec_result.begin() + pos, leftover);
+        auto insert_pos = vec_result.begin();
+        std::advance(insert_pos, left);
+        vec_result.insert(insert_pos, toInsert);
     }
 
     return vec_result;
 }
 
-
 std::deque<int> MergeSort::DgetInput()
 {
 	return deq_sequence;
 }
-
-
 
 
 std::deque<size_t> MergeSort::DgetJacobsthalOrder(size_t n) {
@@ -356,109 +364,109 @@ std::deque<size_t> MergeSort::DgetJacobsthalOrder(size_t n) {
     return order;
 }
 
- std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input){
+//  std::deque<int> MergeSort::FJAlgoDeq(std::deque<int> input){
 
-    if (input.size() <= 1) {
-        return input;
-    }
+//     if (input.size() <= 1) {
+//         return input;
+//     }
 
-    std::deque<PairWithIndex> pairs;
-    int leftover = -1;
-    bool has_leftover = false;
+//     std::deque<PairWithIndex> pairs;
+//     int leftover = -1;
+//     bool has_leftover = false;
 
-    //
-    std::deque<int> main_chain;
+//     //
+//     std::deque<int> main_chain;
 
-//Keep track of original pairing when building the pairs
-    for (size_t i = 0; i + 1 < input.size(); i += 2) {
-        PairWithIndex p;
-        if (input[i] < input[i + 1]) {
-            m_comparaisons++;
-            std::swap(input[i], input[i + 1]);
-        }
-        p.main = input[i];
-        p.pend = input[i + 1];
-        main_chain.push_back(input[i]);
-        p.originalIndex = pairs.size();
-        pairs.push_back(p);
-    }
+// //Keep track of original pairing when building the pairs
+//     for (size_t i = 0; i + 1 < input.size(); i += 2) {
+//         PairWithIndex p;
+//         if (input[i] < input[i + 1]) {
+//             m_comparaisons++;
+//             std::swap(input[i], input[i + 1]);
+//         }
+//         p.main = input[i];
+//         p.pend = input[i + 1];
+//         main_chain.push_back(input[i]);
+//         p.originalIndex = pairs.size();
+//         pairs.push_back(p);
+//     }
 
-    // Handle odd number of elements (straggler)
-    if (input.size() % 2 == 1) {
-        leftover = input.back();
-        has_leftover = true;
-    }
+//     // Handle odd number of elements (straggler)
+//     if (input.size() % 2 == 1) {
+//         leftover = input.back();
+//         has_leftover = true;
+//     }
 
-    // Recursively sort the main chain
-    main_chain = FJAlgoDeq(main_chain);
+//     // Recursively sort the main chain
+//     main_chain = FJAlgoDeq(main_chain);
 
-    std::deque<PairWithIndex> sortedPairs;
-    for (size_t i = 0; i < main_chain.size(); i++) {
-        for (size_t j = 0; j < pairs.size(); j++) {
-            if (pairs[j].main == main_chain[i]) {
-                m_comparaisons++;
-                sortedPairs.push_back(pairs[j]);
-                pairs[j].main = -1;
-                break;
-            }
-        }
-    }
+//     std::deque<PairWithIndex> sortedPairs;
+//     for (size_t i = 0; i < main_chain.size(); i++) {
+//         for (size_t j = 0; j < pairs.size(); j++) {
+//             if (pairs[j].main == main_chain[i]) {
+//                 m_comparaisons++;
+//                 sortedPairs.push_back(pairs[j]);
+//                 pairs[j].main = -1;
+//                 break;
+//             }
+//         }
+//     }
 
-    d_result = main_chain;
+//     d_result = main_chain;
 
-    // Insert first smaller element at the beginning
-    if (!sortedPairs.empty()) {
-        d_result.insert(d_result.begin(), sortedPairs[0].pend);
-    }
+//     // Insert first smaller element at the beginning
+//     if (!sortedPairs.empty()) {
+//         d_result.insert(d_result.begin(), sortedPairs[0].pend);
+//     }
 
-    // Get Jacobstahl insertion order for remianing smaller elements
-   d_order = DgetJacobsthalOrder(sortedPairs.size());
+//     // Get Jacobstahl insertion order for remianing smaller elements
+//    d_order = DgetJacobsthalOrder(sortedPairs.size());
 
-    // Insert remaining smaller elements in Jacobstahl order
-    for (size_t i = 0; i < d_order.size(); i++) {
-        size_t idx = d_order[i];
-        if (idx == 0)
-            continue;
-        if (idx >= sortedPairs.size())
-            continue;
+//     // Insert remaining smaller elements in Jacobstahl order
+//     for (size_t i = 0; i < d_order.size(); i++) {
+//         size_t idx = d_order[i];
+//         if (idx == 0)
+//             continue;
+//         if (idx >= sortedPairs.size())
+//             continue;
 
-        int toInsert = sortedPairs[idx].pend;
-        int pairBigger = sortedPairs[idx].main;
+//         int toInsert = sortedPairs[idx].pend;
+//         int pairBigger = sortedPairs[idx].main;
 
-        //Max pos is the pend's pair
-        size_t maxPos = 0;
-        for (size_t j = 0; j < d_result.size(); j++) {
-            if (d_result[j] == pairBigger) {
-                maxPos = j;
-                break;
-            }
-        }
+//         //Max pos is the pend's pair
+//         size_t maxPos = 0;
+//         for (size_t j = 0; j < d_result.size(); j++) {
+//             if (d_result[j] == pairBigger) {
+//                 maxPos = j;
+//                 break;
+//             }
+//         }
 
-        // Binary search up to the paired element's position
-        size_t left = 0;
-        size_t right = maxPos + 1;
-        while (left < right) {
-            size_t mid = left + (right - left) / 2;
-            if (d_result[mid] < toInsert) {
-                m_comparaisons++;
-                left = mid + 1;
-            } else {
-                right = mid;
-            }
-        }
-        d_result.insert(d_result.begin() + left, toInsert);
-    }
+//         // Binary search up to the paired element's position
+//         size_t left = 0;
+//         size_t right = maxPos + 1;
+//         while (left < right) {
+//             size_t mid = left + (right - left) / 2;
+//             if (d_result[mid] < toInsert) {
+//                 m_comparaisons++;
+//                 left = mid + 1;
+//             } else {
+//                 right = mid;
+//             }
+//         }
+//         d_result.insert(d_result.begin() + left, toInsert);
+//     }
 
-    // Insert straggler without jacobstahl order
-    if (has_leftover) {
-        size_t pos = 0;
-        while (pos < d_result.size() && d_result[pos] < leftover) {
-            m_comparaisons++;
-            pos++;
-        }
-        d_result.insert(d_result.begin() + pos, leftover);
-    }
+//     // Insert straggler without jacobstahl order
+//     if (has_leftover) {
+//         size_t pos = 0;
+//         while (pos < d_result.size() && d_result[pos] < leftover) {
+//             m_comparaisons++;
+//             pos++;
+//         }
+//         d_result.insert(d_result.begin() + pos, leftover);
+//     }
 
-    return d_result;
-}
+//     return d_result;
+// }
 
